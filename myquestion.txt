@@ -1,0 +1,2 @@
+i want develop weighing scale application using flutter desktop i need to connect weighing scale to my app and also 
+i need to store data in local db and i need to migrate or version upgrade of app and db . i need to manage migrate db like django how can i  use in flutter
