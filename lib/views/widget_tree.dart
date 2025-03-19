@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:my_ubuntu_app/data/constant.dart';
 import 'package:my_ubuntu_app/data/notifier.dart';
 import 'package:my_ubuntu_app/views/pages/home_page.dart';
 import 'package:my_ubuntu_app/views/pages/login_page.dart';
 import 'package:my_ubuntu_app/views/pages/profile_page.dart';
 import 'package:my_ubuntu_app/views/pages/settings_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'widgets/navbar_widget.dart';
 
@@ -24,7 +26,9 @@ class WidgetTree extends StatelessWidget {
           backgroundColor: Colors.teal,
           actions: [
             IconButton(
-                onPressed: () {
+                onPressed: () async{
+                  final SharedPreferences prefs = await SharedPreferences.getInstance();
+                  await prefs.setBool(AppConstants.themeMode, isDarkModeNotifier.value);
                   isDarkModeNotifier.value = !isDarkModeNotifier.value;
                 },
                 icon: ValueListenableBuilder(
