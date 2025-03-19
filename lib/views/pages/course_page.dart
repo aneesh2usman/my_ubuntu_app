@@ -42,8 +42,8 @@ class _CoursePageState extends State<CoursePage> {
     // TODO: implement initState
     super.initState();
     _coursedata = getCourse();
-
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,39 +54,46 @@ class _CoursePageState extends State<CoursePage> {
         future: _coursedata,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator(
-              strokeWidth : 10.0,
+            return const Center(
+                child: CircularProgressIndicator(
+              strokeWidth: 10.0,
             ));
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
-          }else if (snapshot.hasData) {
-            Course course = snapshot.data!;
-              return SingleChildScrollView( // Allow scrolling
-                child: Padding(
-                  padding: const EdgeInsets.all(50.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start, // Align text to the left
-                    children: <Widget>[
-                      _buildDetailRow('ID', course.id.toString()),
-                      _buildDetailRow('Secret', course.secret),
-                      _buildDetailRow('EM Score', course.emScore.toString()),
-                      _buildDetailRow('Username', course.username),
-                      _buildDetailRow('Timestamp', course.timestamp.toString()),
-                      ElevatedButton(onPressed: () {
-                        setState(() {
-                          _coursedata = getCourse();
-                        });
-                        
-                      }, child: Text("Refresh"))
-                    ],
-                  ),
-                ),
-              );
-
+          } else if (snapshot.hasData) {
+            return courseDetail(snapshot);
           } else {
             return const Center(child: Text('No data found'));
           }
         },
+      ),
+    );
+  }
+
+  Widget courseDetail(snapshot) {
+    Course course = snapshot.data!;
+    return SingleChildScrollView(
+      // Allow scrolling
+      child: Padding(
+        padding: const EdgeInsets.all(50.0),
+        child: Column(
+          crossAxisAlignment:
+              CrossAxisAlignment.start, // Align text to the left
+          children: <Widget>[
+            _buildDetailRow('ID', course.id.toString()),
+            _buildDetailRow('Secret', course.secret),
+            _buildDetailRow('EM Score', course.emScore.toString()),
+            _buildDetailRow('Username', course.username),
+            _buildDetailRow('Timestamp', course.timestamp.toString()),
+            ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    _coursedata = getCourse();
+                  });
+                },
+                child: Text("Refresh"))
+          ],
+        ),
       ),
     );
   }
