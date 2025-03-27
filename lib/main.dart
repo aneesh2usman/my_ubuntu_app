@@ -1,10 +1,11 @@
+
 import 'package:flutter/material.dart';
 import 'package:my_ubuntu_app/data/constant.dart';
 import 'package:my_ubuntu_app/data/notifier.dart';
 import 'package:my_ubuntu_app/views/pages/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'views/widget_tree.dart';
+
 
 void main() {
   runApp(const MyApp());

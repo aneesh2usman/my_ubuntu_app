@@ -5,6 +5,9 @@ import 'package:my_ubuntu_app/views/pages/home_page.dart';
 import 'package:my_ubuntu_app/views/pages/login_page.dart';
 import 'package:my_ubuntu_app/views/pages/profile_page.dart';
 import 'package:my_ubuntu_app/views/pages/settings_page.dart';
+import 'package:my_ubuntu_app/views/pages/task_page.dart';
+import 'package:my_ubuntu_app/views/pages/task_page_with_pagination.dart';
+import 'package:my_ubuntu_app/views/pages/task_page_with_pagination_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'widgets/navbar_widget.dart';
@@ -12,6 +15,9 @@ import 'widgets/navbar_widget.dart';
 List<Widget> pages = [
   HomePage(),
   ProfilePage(),
+  TaskListPage(),
+  TaskListPagination(),
+  TaskListPaginationwithProvider(),
 ];
 
 class WidgetTree extends StatelessWidget {
@@ -26,9 +32,11 @@ class WidgetTree extends StatelessWidget {
           backgroundColor: Colors.teal,
           actions: [
             IconButton(
-                onPressed: () async{
-                  final SharedPreferences prefs = await SharedPreferences.getInstance();
-                  await prefs.setBool(AppConstants.themeMode, isDarkModeNotifier.value);
+                onPressed: () async {
+                  final SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  await prefs.setBool(
+                      AppConstants.themeMode, isDarkModeNotifier.value);
                   isDarkModeNotifier.value = !isDarkModeNotifier.value;
                 },
                 icon: ValueListenableBuilder(
@@ -43,12 +51,14 @@ class WidgetTree extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (context) {
-                      return SettingsPage(title: "Settings",);
+                      return SettingsPage(
+                        title: "Settings",
+                      );
                     },
                   ));
                 },
-                icon: Icon(Icons.settings)),  
-                IconButton(
+                icon: Icon(Icons.settings)),
+            IconButton(
                 onPressed: () {
                   Navigator.pushReplacement(context, MaterialPageRoute(
                     builder: (context) {
