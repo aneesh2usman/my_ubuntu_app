@@ -1,0 +1,1 @@
+i need to develop weighing scale using flutter need user , role managment , charge fees on vehicle and report generate which local db i need to use
