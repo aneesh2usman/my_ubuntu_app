@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:my_ubuntu_app/data/constant.dart';
+import 'package:my_ubuntu_app/data/db/app_database.dart';
 import 'package:my_ubuntu_app/data/notifier.dart';
 import 'package:my_ubuntu_app/views/pages/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,6 +9,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final database = AppDatabase();
+
+  debugPrint('Before ensuring database is open');
+  // await database.executor.ensureOpen(); // Use 'executor.ensureOpen()' instead
+  debugPrint('After ensuring database is open');
   runApp(const MyApp());
 }
 

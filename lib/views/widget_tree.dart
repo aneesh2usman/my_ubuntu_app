@@ -5,9 +5,10 @@ import 'package:my_ubuntu_app/views/pages/home_page.dart';
 import 'package:my_ubuntu_app/views/pages/login_page.dart';
 import 'package:my_ubuntu_app/views/pages/profile_page.dart';
 import 'package:my_ubuntu_app/views/pages/settings_page.dart';
-import 'package:my_ubuntu_app/views/pages/task_page.dart';
-import 'package:my_ubuntu_app/views/pages/task_page_with_pagination.dart';
-import 'package:my_ubuntu_app/views/pages/task_page_with_pagination_provider.dart';
+// import 'package:my_ubuntu_app/views/pages/task_page.dart';
+// import 'package:my_ubuntu_app/views/pages/task_page_with_pagination.dart';
+// import 'package:my_ubuntu_app/views/pages/task_page_with_pagination_provider.dart';
+import 'package:my_ubuntu_app/views/pages/user_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'widgets/navbar_widget.dart';
@@ -15,9 +16,10 @@ import 'widgets/navbar_widget.dart';
 List<Widget> pages = [
   HomePage(),
   ProfilePage(),
-  TaskListPage(),
-  TaskListPagination(),
-  TaskListPaginationwithProvider(),
+  UserListPaginationwithProvider()
+  // TaskListPage(),
+  // TaskListPagination(),
+  // TaskListPaginationwithProvider(),
 ];
 
 class WidgetTree extends StatelessWidget {

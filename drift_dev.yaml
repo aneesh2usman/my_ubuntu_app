@@ -1,0 +1,7 @@
+targets:
+  $default:
+    builders:
+      drift_dev:
+        options:
+          schema:
+            - data/db/migrations/schema_v4.dart

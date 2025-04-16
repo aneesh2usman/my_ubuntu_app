@@ -207,6 +207,8 @@ class TaskDao {
           taskId: newTaskId,
         ),
       );
+      final projectId = await _database.projectDao.insertProject("Project 1", DateTime.now());
+      print("Inserted project with ID: $projectId");
 
       return newTaskId;
     });

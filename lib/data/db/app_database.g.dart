@@ -3,12 +3,12 @@
 part of 'app_database.dart';
 
 // ignore_for_file: type=lint
-class $TypeTableTable extends TypeTable
-    with TableInfo<$TypeTableTable, TypeTableData> {
+class $UserTableTable extends UserTable
+    with TableInfo<$UserTableTable, UserTableData> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $TypeTableTable(this.attachedDatabase, [this._alias]);
+  $UserTableTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -18,225 +18,189 @@ class $TypeTableTable extends TypeTable
       requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _typeNameMeta =
-      const VerificationMeta('typeName');
+  static const VerificationMeta _usernameMeta =
+      const VerificationMeta('username');
   @override
-  late final GeneratedColumn<String> typeName = GeneratedColumn<String>(
-      'type_name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+  late final GeneratedColumn<String> username = GeneratedColumn<String>(
+      'username', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
+  static const VerificationMeta _emailMeta = const VerificationMeta('email');
   @override
-  List<GeneratedColumn> get $columns => [id, typeName];
+  late final GeneratedColumn<String> email = GeneratedColumn<String>(
+      'email', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
+  static const VerificationMeta _firstnameMeta =
+      const VerificationMeta('firstname');
   @override
-  String get aliasedName => _alias ?? actualTableName;
+  late final GeneratedColumn<String> firstname = GeneratedColumn<String>(
+      'firstname', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _lastnameMeta =
+      const VerificationMeta('lastname');
   @override
-  String get actualTableName => $name;
-  static const String $name = 'type_table';
+  late final GeneratedColumn<String> lastname = GeneratedColumn<String>(
+      'lastname', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _passwordMeta =
+      const VerificationMeta('password');
   @override
-  VerificationContext validateIntegrity(Insertable<TypeTableData> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('type_name')) {
-      context.handle(_typeNameMeta,
-          typeName.isAcceptableOrUnknown(data['type_name']!, _typeNameMeta));
-    } else if (isInserting) {
-      context.missing(_typeNameMeta);
-    }
-    return context;
-  }
-
+  late final GeneratedColumn<String> password = GeneratedColumn<String>(
+      'password', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _saltMeta = const VerificationMeta('salt');
   @override
-  Set<GeneratedColumn> get $primaryKey => {id};
+  late final GeneratedColumn<String> salt = GeneratedColumn<String>(
+      'salt', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _lastLoginMeta =
+      const VerificationMeta('lastLogin');
   @override
-  TypeTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return TypeTableData(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      typeName: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}type_name'])!,
-    );
-  }
-
+  late final GeneratedColumn<DateTime> lastLogin = GeneratedColumn<DateTime>(
+      'last_login', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _isSuperuserMeta =
+      const VerificationMeta('isSuperuser');
   @override
-  $TypeTableTable createAlias(String alias) {
-    return $TypeTableTable(attachedDatabase, alias);
-  }
-}
-
-class TypeTableData extends DataClass implements Insertable<TypeTableData> {
-  final int id;
-  final String typeName;
-  const TypeTableData({required this.id, required this.typeName});
+  late final GeneratedColumn<bool> isSuperuser = GeneratedColumn<bool>(
+      'is_superuser', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("is_superuser" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _isStaffMeta =
+      const VerificationMeta('isStaff');
   @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<int>(id);
-    map['type_name'] = Variable<String>(typeName);
-    return map;
-  }
-
-  TypeTableCompanion toCompanion(bool nullToAbsent) {
-    return TypeTableCompanion(
-      id: Value(id),
-      typeName: Value(typeName),
-    );
-  }
-
-  factory TypeTableData.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return TypeTableData(
-      id: serializer.fromJson<int>(json['id']),
-      typeName: serializer.fromJson<String>(json['typeName']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
-      'typeName': serializer.toJson<String>(typeName),
-    };
-  }
-
-  TypeTableData copyWith({int? id, String? typeName}) => TypeTableData(
-        id: id ?? this.id,
-        typeName: typeName ?? this.typeName,
-      );
-  TypeTableData copyWithCompanion(TypeTableCompanion data) {
-    return TypeTableData(
-      id: data.id.present ? data.id.value : this.id,
-      typeName: data.typeName.present ? data.typeName.value : this.typeName,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('TypeTableData(')
-          ..write('id: $id, ')
-          ..write('typeName: $typeName')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(id, typeName);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is TypeTableData &&
-          other.id == this.id &&
-          other.typeName == this.typeName);
-}
-
-class TypeTableCompanion extends UpdateCompanion<TypeTableData> {
-  final Value<int> id;
-  final Value<String> typeName;
-  const TypeTableCompanion({
-    this.id = const Value.absent(),
-    this.typeName = const Value.absent(),
-  });
-  TypeTableCompanion.insert({
-    this.id = const Value.absent(),
-    required String typeName,
-  }) : typeName = Value(typeName);
-  static Insertable<TypeTableData> custom({
-    Expression<int>? id,
-    Expression<String>? typeName,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (typeName != null) 'type_name': typeName,
-    });
-  }
-
-  TypeTableCompanion copyWith({Value<int>? id, Value<String>? typeName}) {
-    return TypeTableCompanion(
-      id: id ?? this.id,
-      typeName: typeName ?? this.typeName,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
-    if (typeName.present) {
-      map['type_name'] = Variable<String>(typeName.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('TypeTableCompanion(')
-          ..write('id: $id, ')
-          ..write('typeName: $typeName')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $TaskTableTable extends TaskTable
-    with TableInfo<$TaskTableTable, TaskTableData> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $TaskTableTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
+  late final GeneratedColumn<bool> isStaff = GeneratedColumn<bool>(
+      'is_staff', aliasedName, false,
+      type: DriftSqlType.bool,
       requiredDuringInsert: false,
       defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+          GeneratedColumn.constraintIsAlways('CHECK ("is_staff" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _isActiveMeta =
+      const VerificationMeta('isActive');
   @override
-  late final GeneratedColumn<String> title = GeneratedColumn<String>(
-      'title', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _typeMeta = const VerificationMeta('type');
-  @override
-  late final GeneratedColumn<int> type = GeneratedColumn<int>(
-      'type', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
+  late final GeneratedColumn<bool> isActive = GeneratedColumn<bool>(
+      'is_active', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
       defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES type_table (id)'));
+          GeneratedColumn.constraintIsAlways('CHECK ("is_active" IN (0, 1))'),
+      defaultValue: const Constant(true));
+  static const VerificationMeta _dateJoinedMeta =
+      const VerificationMeta('dateJoined');
   @override
-  List<GeneratedColumn> get $columns => [id, title, type];
+  late final GeneratedColumn<DateTime> dateJoined = GeneratedColumn<DateTime>(
+      'date_joined', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _phoneNumberMeta =
+      const VerificationMeta('phoneNumber');
+  @override
+  late final GeneratedColumn<String> phoneNumber = GeneratedColumn<String>(
+      'phone_number', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _isDeletedMeta =
+      const VerificationMeta('isDeleted');
+  @override
+  late final GeneratedColumn<bool> isDeleted = GeneratedColumn<bool>(
+      'is_deleted', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_deleted" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        username,
+        email,
+        firstname,
+        lastname,
+        password,
+        salt,
+        lastLogin,
+        isSuperuser,
+        isStaff,
+        isActive,
+        dateJoined,
+        phoneNumber,
+        isDeleted
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'task_table';
+  static const String $name = 'user_table';
   @override
-  VerificationContext validateIntegrity(Insertable<TaskTableData> instance,
+  VerificationContext validateIntegrity(Insertable<UserTableData> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('title')) {
-      context.handle(
-          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
-    } else if (isInserting) {
-      context.missing(_titleMeta);
+    if (data.containsKey('username')) {
+      context.handle(_usernameMeta,
+          username.isAcceptableOrUnknown(data['username']!, _usernameMeta));
     }
-    if (data.containsKey('type')) {
+    if (data.containsKey('email')) {
       context.handle(
-          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
-    } else if (isInserting) {
-      context.missing(_typeMeta);
+          _emailMeta, email.isAcceptableOrUnknown(data['email']!, _emailMeta));
+    }
+    if (data.containsKey('firstname')) {
+      context.handle(_firstnameMeta,
+          firstname.isAcceptableOrUnknown(data['firstname']!, _firstnameMeta));
+    }
+    if (data.containsKey('lastname')) {
+      context.handle(_lastnameMeta,
+          lastname.isAcceptableOrUnknown(data['lastname']!, _lastnameMeta));
+    }
+    if (data.containsKey('password')) {
+      context.handle(_passwordMeta,
+          password.isAcceptableOrUnknown(data['password']!, _passwordMeta));
+    }
+    if (data.containsKey('salt')) {
+      context.handle(
+          _saltMeta, salt.isAcceptableOrUnknown(data['salt']!, _saltMeta));
+    }
+    if (data.containsKey('last_login')) {
+      context.handle(_lastLoginMeta,
+          lastLogin.isAcceptableOrUnknown(data['last_login']!, _lastLoginMeta));
+    }
+    if (data.containsKey('is_superuser')) {
+      context.handle(
+          _isSuperuserMeta,
+          isSuperuser.isAcceptableOrUnknown(
+              data['is_superuser']!, _isSuperuserMeta));
+    }
+    if (data.containsKey('is_staff')) {
+      context.handle(_isStaffMeta,
+          isStaff.isAcceptableOrUnknown(data['is_staff']!, _isStaffMeta));
+    }
+    if (data.containsKey('is_active')) {
+      context.handle(_isActiveMeta,
+          isActive.isAcceptableOrUnknown(data['is_active']!, _isActiveMeta));
+    }
+    if (data.containsKey('date_joined')) {
+      context.handle(
+          _dateJoinedMeta,
+          dateJoined.isAcceptableOrUnknown(
+              data['date_joined']!, _dateJoinedMeta));
+    }
+    if (data.containsKey('phone_number')) {
+      context.handle(
+          _phoneNumberMeta,
+          phoneNumber.isAcceptableOrUnknown(
+              data['phone_number']!, _phoneNumberMeta));
+    }
+    if (data.containsKey('is_deleted')) {
+      context.handle(_isDeletedMeta,
+          isDeleted.isAcceptableOrUnknown(data['is_deleted']!, _isDeletedMeta));
     }
     return context;
   }
@@ -244,54 +208,166 @@ class $TaskTableTable extends TaskTable
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  TaskTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+  UserTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return TaskTableData(
+    return UserTableData(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      title: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
-      type: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}type'])!,
+      username: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}username']),
+      email: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}email']),
+      firstname: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}firstname']),
+      lastname: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}lastname']),
+      password: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}password']),
+      salt: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}salt']),
+      lastLogin: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}last_login']),
+      isSuperuser: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_superuser'])!,
+      isStaff: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_staff'])!,
+      isActive: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_active'])!,
+      dateJoined: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}date_joined']),
+      phoneNumber: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}phone_number']),
+      isDeleted: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_deleted'])!,
     );
   }
 
   @override
-  $TaskTableTable createAlias(String alias) {
-    return $TaskTableTable(attachedDatabase, alias);
+  $UserTableTable createAlias(String alias) {
+    return $UserTableTable(attachedDatabase, alias);
   }
 }
 
-class TaskTableData extends DataClass implements Insertable<TaskTableData> {
+class UserTableData extends DataClass implements Insertable<UserTableData> {
   final int id;
-  final String title;
-  final int type;
-  const TaskTableData(
-      {required this.id, required this.title, required this.type});
+  final String? username;
+  final String? email;
+  final String? firstname;
+  final String? lastname;
+  final String? password;
+  final String? salt;
+  final DateTime? lastLogin;
+  final bool isSuperuser;
+  final bool isStaff;
+  final bool isActive;
+  final DateTime? dateJoined;
+  final String? phoneNumber;
+  final bool isDeleted;
+  const UserTableData(
+      {required this.id,
+      this.username,
+      this.email,
+      this.firstname,
+      this.lastname,
+      this.password,
+      this.salt,
+      this.lastLogin,
+      required this.isSuperuser,
+      required this.isStaff,
+      required this.isActive,
+      this.dateJoined,
+      this.phoneNumber,
+      required this.isDeleted});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['title'] = Variable<String>(title);
-    map['type'] = Variable<int>(type);
+    if (!nullToAbsent || username != null) {
+      map['username'] = Variable<String>(username);
+    }
+    if (!nullToAbsent || email != null) {
+      map['email'] = Variable<String>(email);
+    }
+    if (!nullToAbsent || firstname != null) {
+      map['firstname'] = Variable<String>(firstname);
+    }
+    if (!nullToAbsent || lastname != null) {
+      map['lastname'] = Variable<String>(lastname);
+    }
+    if (!nullToAbsent || password != null) {
+      map['password'] = Variable<String>(password);
+    }
+    if (!nullToAbsent || salt != null) {
+      map['salt'] = Variable<String>(salt);
+    }
+    if (!nullToAbsent || lastLogin != null) {
+      map['last_login'] = Variable<DateTime>(lastLogin);
+    }
+    map['is_superuser'] = Variable<bool>(isSuperuser);
+    map['is_staff'] = Variable<bool>(isStaff);
+    map['is_active'] = Variable<bool>(isActive);
+    if (!nullToAbsent || dateJoined != null) {
+      map['date_joined'] = Variable<DateTime>(dateJoined);
+    }
+    if (!nullToAbsent || phoneNumber != null) {
+      map['phone_number'] = Variable<String>(phoneNumber);
+    }
+    map['is_deleted'] = Variable<bool>(isDeleted);
     return map;
   }
 
-  TaskTableCompanion toCompanion(bool nullToAbsent) {
-    return TaskTableCompanion(
+  UserTableCompanion toCompanion(bool nullToAbsent) {
+    return UserTableCompanion(
       id: Value(id),
-      title: Value(title),
-      type: Value(type),
+      username: username == null && nullToAbsent
+          ? const Value.absent()
+          : Value(username),
+      email:
+          email == null && nullToAbsent ? const Value.absent() : Value(email),
+      firstname: firstname == null && nullToAbsent
+          ? const Value.absent()
+          : Value(firstname),
+      lastname: lastname == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastname),
+      password: password == null && nullToAbsent
+          ? const Value.absent()
+          : Value(password),
+      salt: salt == null && nullToAbsent ? const Value.absent() : Value(salt),
+      lastLogin: lastLogin == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastLogin),
+      isSuperuser: Value(isSuperuser),
+      isStaff: Value(isStaff),
+      isActive: Value(isActive),
+      dateJoined: dateJoined == null && nullToAbsent
+          ? const Value.absent()
+          : Value(dateJoined),
+      phoneNumber: phoneNumber == null && nullToAbsent
+          ? const Value.absent()
+          : Value(phoneNumber),
+      isDeleted: Value(isDeleted),
     );
   }
 
-  factory TaskTableData.fromJson(Map<String, dynamic> json,
+  factory UserTableData.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return TaskTableData(
+    return UserTableData(
       id: serializer.fromJson<int>(json['id']),
-      title: serializer.fromJson<String>(json['title']),
-      type: serializer.fromJson<int>(json['type']),
+      username: serializer.fromJson<String?>(json['username']),
+      email: serializer.fromJson<String?>(json['email']),
+      firstname: serializer.fromJson<String?>(json['firstname']),
+      lastname: serializer.fromJson<String?>(json['lastname']),
+      password: serializer.fromJson<String?>(json['password']),
+      salt: serializer.fromJson<String?>(json['salt']),
+      lastLogin: serializer.fromJson<DateTime?>(json['lastLogin']),
+      isSuperuser: serializer.fromJson<bool>(json['isSuperuser']),
+      isStaff: serializer.fromJson<bool>(json['isStaff']),
+      isActive: serializer.fromJson<bool>(json['isActive']),
+      dateJoined: serializer.fromJson<DateTime?>(json['dateJoined']),
+      phoneNumber: serializer.fromJson<String?>(json['phoneNumber']),
+      isDeleted: serializer.fromJson<bool>(json['isDeleted']),
     );
   }
   @override
@@ -299,78 +375,243 @@ class TaskTableData extends DataClass implements Insertable<TaskTableData> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'title': serializer.toJson<String>(title),
-      'type': serializer.toJson<int>(type),
+      'username': serializer.toJson<String?>(username),
+      'email': serializer.toJson<String?>(email),
+      'firstname': serializer.toJson<String?>(firstname),
+      'lastname': serializer.toJson<String?>(lastname),
+      'password': serializer.toJson<String?>(password),
+      'salt': serializer.toJson<String?>(salt),
+      'lastLogin': serializer.toJson<DateTime?>(lastLogin),
+      'isSuperuser': serializer.toJson<bool>(isSuperuser),
+      'isStaff': serializer.toJson<bool>(isStaff),
+      'isActive': serializer.toJson<bool>(isActive),
+      'dateJoined': serializer.toJson<DateTime?>(dateJoined),
+      'phoneNumber': serializer.toJson<String?>(phoneNumber),
+      'isDeleted': serializer.toJson<bool>(isDeleted),
     };
   }
 
-  TaskTableData copyWith({int? id, String? title, int? type}) => TaskTableData(
+  UserTableData copyWith(
+          {int? id,
+          Value<String?> username = const Value.absent(),
+          Value<String?> email = const Value.absent(),
+          Value<String?> firstname = const Value.absent(),
+          Value<String?> lastname = const Value.absent(),
+          Value<String?> password = const Value.absent(),
+          Value<String?> salt = const Value.absent(),
+          Value<DateTime?> lastLogin = const Value.absent(),
+          bool? isSuperuser,
+          bool? isStaff,
+          bool? isActive,
+          Value<DateTime?> dateJoined = const Value.absent(),
+          Value<String?> phoneNumber = const Value.absent(),
+          bool? isDeleted}) =>
+      UserTableData(
         id: id ?? this.id,
-        title: title ?? this.title,
-        type: type ?? this.type,
+        username: username.present ? username.value : this.username,
+        email: email.present ? email.value : this.email,
+        firstname: firstname.present ? firstname.value : this.firstname,
+        lastname: lastname.present ? lastname.value : this.lastname,
+        password: password.present ? password.value : this.password,
+        salt: salt.present ? salt.value : this.salt,
+        lastLogin: lastLogin.present ? lastLogin.value : this.lastLogin,
+        isSuperuser: isSuperuser ?? this.isSuperuser,
+        isStaff: isStaff ?? this.isStaff,
+        isActive: isActive ?? this.isActive,
+        dateJoined: dateJoined.present ? dateJoined.value : this.dateJoined,
+        phoneNumber: phoneNumber.present ? phoneNumber.value : this.phoneNumber,
+        isDeleted: isDeleted ?? this.isDeleted,
       );
-  TaskTableData copyWithCompanion(TaskTableCompanion data) {
-    return TaskTableData(
+  UserTableData copyWithCompanion(UserTableCompanion data) {
+    return UserTableData(
       id: data.id.present ? data.id.value : this.id,
-      title: data.title.present ? data.title.value : this.title,
-      type: data.type.present ? data.type.value : this.type,
+      username: data.username.present ? data.username.value : this.username,
+      email: data.email.present ? data.email.value : this.email,
+      firstname: data.firstname.present ? data.firstname.value : this.firstname,
+      lastname: data.lastname.present ? data.lastname.value : this.lastname,
+      password: data.password.present ? data.password.value : this.password,
+      salt: data.salt.present ? data.salt.value : this.salt,
+      lastLogin: data.lastLogin.present ? data.lastLogin.value : this.lastLogin,
+      isSuperuser:
+          data.isSuperuser.present ? data.isSuperuser.value : this.isSuperuser,
+      isStaff: data.isStaff.present ? data.isStaff.value : this.isStaff,
+      isActive: data.isActive.present ? data.isActive.value : this.isActive,
+      dateJoined:
+          data.dateJoined.present ? data.dateJoined.value : this.dateJoined,
+      phoneNumber:
+          data.phoneNumber.present ? data.phoneNumber.value : this.phoneNumber,
+      isDeleted: data.isDeleted.present ? data.isDeleted.value : this.isDeleted,
     );
   }
 
   @override
   String toString() {
-    return (StringBuffer('TaskTableData(')
+    return (StringBuffer('UserTableData(')
           ..write('id: $id, ')
-          ..write('title: $title, ')
-          ..write('type: $type')
+          ..write('username: $username, ')
+          ..write('email: $email, ')
+          ..write('firstname: $firstname, ')
+          ..write('lastname: $lastname, ')
+          ..write('password: $password, ')
+          ..write('salt: $salt, ')
+          ..write('lastLogin: $lastLogin, ')
+          ..write('isSuperuser: $isSuperuser, ')
+          ..write('isStaff: $isStaff, ')
+          ..write('isActive: $isActive, ')
+          ..write('dateJoined: $dateJoined, ')
+          ..write('phoneNumber: $phoneNumber, ')
+          ..write('isDeleted: $isDeleted')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, title, type);
+  int get hashCode => Object.hash(
+      id,
+      username,
+      email,
+      firstname,
+      lastname,
+      password,
+      salt,
+      lastLogin,
+      isSuperuser,
+      isStaff,
+      isActive,
+      dateJoined,
+      phoneNumber,
+      isDeleted);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is TaskTableData &&
+      (other is UserTableData &&
           other.id == this.id &&
-          other.title == this.title &&
-          other.type == this.type);
+          other.username == this.username &&
+          other.email == this.email &&
+          other.firstname == this.firstname &&
+          other.lastname == this.lastname &&
+          other.password == this.password &&
+          other.salt == this.salt &&
+          other.lastLogin == this.lastLogin &&
+          other.isSuperuser == this.isSuperuser &&
+          other.isStaff == this.isStaff &&
+          other.isActive == this.isActive &&
+          other.dateJoined == this.dateJoined &&
+          other.phoneNumber == this.phoneNumber &&
+          other.isDeleted == this.isDeleted);
 }
 
-class TaskTableCompanion extends UpdateCompanion<TaskTableData> {
+class UserTableCompanion extends UpdateCompanion<UserTableData> {
   final Value<int> id;
-  final Value<String> title;
-  final Value<int> type;
-  const TaskTableCompanion({
+  final Value<String?> username;
+  final Value<String?> email;
+  final Value<String?> firstname;
+  final Value<String?> lastname;
+  final Value<String?> password;
+  final Value<String?> salt;
+  final Value<DateTime?> lastLogin;
+  final Value<bool> isSuperuser;
+  final Value<bool> isStaff;
+  final Value<bool> isActive;
+  final Value<DateTime?> dateJoined;
+  final Value<String?> phoneNumber;
+  final Value<bool> isDeleted;
+  const UserTableCompanion({
     this.id = const Value.absent(),
-    this.title = const Value.absent(),
-    this.type = const Value.absent(),
+    this.username = const Value.absent(),
+    this.email = const Value.absent(),
+    this.firstname = const Value.absent(),
+    this.lastname = const Value.absent(),
+    this.password = const Value.absent(),
+    this.salt = const Value.absent(),
+    this.lastLogin = const Value.absent(),
+    this.isSuperuser = const Value.absent(),
+    this.isStaff = const Value.absent(),
+    this.isActive = const Value.absent(),
+    this.dateJoined = const Value.absent(),
+    this.phoneNumber = const Value.absent(),
+    this.isDeleted = const Value.absent(),
   });
-  TaskTableCompanion.insert({
+  UserTableCompanion.insert({
     this.id = const Value.absent(),
-    required String title,
-    required int type,
-  })  : title = Value(title),
-        type = Value(type);
-  static Insertable<TaskTableData> custom({
+    this.username = const Value.absent(),
+    this.email = const Value.absent(),
+    this.firstname = const Value.absent(),
+    this.lastname = const Value.absent(),
+    this.password = const Value.absent(),
+    this.salt = const Value.absent(),
+    this.lastLogin = const Value.absent(),
+    this.isSuperuser = const Value.absent(),
+    this.isStaff = const Value.absent(),
+    this.isActive = const Value.absent(),
+    this.dateJoined = const Value.absent(),
+    this.phoneNumber = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+  });
+  static Insertable<UserTableData> custom({
     Expression<int>? id,
-    Expression<String>? title,
-    Expression<int>? type,
+    Expression<String>? username,
+    Expression<String>? email,
+    Expression<String>? firstname,
+    Expression<String>? lastname,
+    Expression<String>? password,
+    Expression<String>? salt,
+    Expression<DateTime>? lastLogin,
+    Expression<bool>? isSuperuser,
+    Expression<bool>? isStaff,
+    Expression<bool>? isActive,
+    Expression<DateTime>? dateJoined,
+    Expression<String>? phoneNumber,
+    Expression<bool>? isDeleted,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (title != null) 'title': title,
-      if (type != null) 'type': type,
+      if (username != null) 'username': username,
+      if (email != null) 'email': email,
+      if (firstname != null) 'firstname': firstname,
+      if (lastname != null) 'lastname': lastname,
+      if (password != null) 'password': password,
+      if (salt != null) 'salt': salt,
+      if (lastLogin != null) 'last_login': lastLogin,
+      if (isSuperuser != null) 'is_superuser': isSuperuser,
+      if (isStaff != null) 'is_staff': isStaff,
+      if (isActive != null) 'is_active': isActive,
+      if (dateJoined != null) 'date_joined': dateJoined,
+      if (phoneNumber != null) 'phone_number': phoneNumber,
+      if (isDeleted != null) 'is_deleted': isDeleted,
     });
   }
 
-  TaskTableCompanion copyWith(
-      {Value<int>? id, Value<String>? title, Value<int>? type}) {
-    return TaskTableCompanion(
+  UserTableCompanion copyWith(
+      {Value<int>? id,
+      Value<String?>? username,
+      Value<String?>? email,
+      Value<String?>? firstname,
+      Value<String?>? lastname,
+      Value<String?>? password,
+      Value<String?>? salt,
+      Value<DateTime?>? lastLogin,
+      Value<bool>? isSuperuser,
+      Value<bool>? isStaff,
+      Value<bool>? isActive,
+      Value<DateTime?>? dateJoined,
+      Value<String?>? phoneNumber,
+      Value<bool>? isDeleted}) {
+    return UserTableCompanion(
       id: id ?? this.id,
-      title: title ?? this.title,
-      type: type ?? this.type,
+      username: username ?? this.username,
+      email: email ?? this.email,
+      firstname: firstname ?? this.firstname,
+      lastname: lastname ?? this.lastname,
+      password: password ?? this.password,
+      salt: salt ?? this.salt,
+      lastLogin: lastLogin ?? this.lastLogin,
+      isSuperuser: isSuperuser ?? this.isSuperuser,
+      isStaff: isStaff ?? this.isStaff,
+      isActive: isActive ?? this.isActive,
+      dateJoined: dateJoined ?? this.dateJoined,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      isDeleted: isDeleted ?? this.isDeleted,
     );
   }
 
@@ -380,32 +621,76 @@ class TaskTableCompanion extends UpdateCompanion<TaskTableData> {
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
-    if (title.present) {
-      map['title'] = Variable<String>(title.value);
+    if (username.present) {
+      map['username'] = Variable<String>(username.value);
     }
-    if (type.present) {
-      map['type'] = Variable<int>(type.value);
+    if (email.present) {
+      map['email'] = Variable<String>(email.value);
+    }
+    if (firstname.present) {
+      map['firstname'] = Variable<String>(firstname.value);
+    }
+    if (lastname.present) {
+      map['lastname'] = Variable<String>(lastname.value);
+    }
+    if (password.present) {
+      map['password'] = Variable<String>(password.value);
+    }
+    if (salt.present) {
+      map['salt'] = Variable<String>(salt.value);
+    }
+    if (lastLogin.present) {
+      map['last_login'] = Variable<DateTime>(lastLogin.value);
+    }
+    if (isSuperuser.present) {
+      map['is_superuser'] = Variable<bool>(isSuperuser.value);
+    }
+    if (isStaff.present) {
+      map['is_staff'] = Variable<bool>(isStaff.value);
+    }
+    if (isActive.present) {
+      map['is_active'] = Variable<bool>(isActive.value);
+    }
+    if (dateJoined.present) {
+      map['date_joined'] = Variable<DateTime>(dateJoined.value);
+    }
+    if (phoneNumber.present) {
+      map['phone_number'] = Variable<String>(phoneNumber.value);
+    }
+    if (isDeleted.present) {
+      map['is_deleted'] = Variable<bool>(isDeleted.value);
     }
     return map;
   }
 
   @override
   String toString() {
-    return (StringBuffer('TaskTableCompanion(')
+    return (StringBuffer('UserTableCompanion(')
           ..write('id: $id, ')
-          ..write('title: $title, ')
-          ..write('type: $type')
+          ..write('username: $username, ')
+          ..write('email: $email, ')
+          ..write('firstname: $firstname, ')
+          ..write('lastname: $lastname, ')
+          ..write('password: $password, ')
+          ..write('salt: $salt, ')
+          ..write('lastLogin: $lastLogin, ')
+          ..write('isSuperuser: $isSuperuser, ')
+          ..write('isStaff: $isStaff, ')
+          ..write('isActive: $isActive, ')
+          ..write('dateJoined: $dateJoined, ')
+          ..write('phoneNumber: $phoneNumber, ')
+          ..write('isDeleted: $isDeleted')
           ..write(')'))
         .toString();
   }
 }
 
-class $AttendantTableTable extends AttendantTable
-    with TableInfo<$AttendantTableTable, AttendantTableData> {
+class $RoleTableTable extends RoleTable
+    with TableInfo<$RoleTableTable, RoleTableData> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $AttendantTableTable(this.attachedDatabase, [this._alias]);
+  $RoleTableTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -419,24 +704,18 @@ class $AttendantTableTable extends AttendantTable
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
       'name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _taskIdMeta = const VerificationMeta('taskId');
-  @override
-  late final GeneratedColumn<int> taskId = GeneratedColumn<int>(
-      'task_id', aliasedName, false,
-      type: DriftSqlType.int,
+      type: DriftSqlType.string,
       requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES task_table (id)'));
+      defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
   @override
-  List<GeneratedColumn> get $columns => [id, name, taskId];
+  List<GeneratedColumn> get $columns => [id, name];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'attendant_table';
+  static const String $name = 'role_table';
   @override
-  VerificationContext validateIntegrity(Insertable<AttendantTableData> instance,
+  VerificationContext validateIntegrity(Insertable<RoleTableData> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -449,67 +728,53 @@ class $AttendantTableTable extends AttendantTable
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
-    if (data.containsKey('task_id')) {
-      context.handle(_taskIdMeta,
-          taskId.isAcceptableOrUnknown(data['task_id']!, _taskIdMeta));
-    } else if (isInserting) {
-      context.missing(_taskIdMeta);
-    }
     return context;
   }
 
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  AttendantTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+  RoleTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return AttendantTableData(
+    return RoleTableData(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      taskId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}task_id'])!,
     );
   }
 
   @override
-  $AttendantTableTable createAlias(String alias) {
-    return $AttendantTableTable(attachedDatabase, alias);
+  $RoleTableTable createAlias(String alias) {
+    return $RoleTableTable(attachedDatabase, alias);
   }
 }
 
-class AttendantTableData extends DataClass
-    implements Insertable<AttendantTableData> {
+class RoleTableData extends DataClass implements Insertable<RoleTableData> {
   final int id;
   final String name;
-  final int taskId;
-  const AttendantTableData(
-      {required this.id, required this.name, required this.taskId});
+  const RoleTableData({required this.id, required this.name});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['name'] = Variable<String>(name);
-    map['task_id'] = Variable<int>(taskId);
     return map;
   }
 
-  AttendantTableCompanion toCompanion(bool nullToAbsent) {
-    return AttendantTableCompanion(
+  RoleTableCompanion toCompanion(bool nullToAbsent) {
+    return RoleTableCompanion(
       id: Value(id),
       name: Value(name),
-      taskId: Value(taskId),
     );
   }
 
-  factory AttendantTableData.fromJson(Map<String, dynamic> json,
+  factory RoleTableData.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return AttendantTableData(
+    return RoleTableData(
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
-      taskId: serializer.fromJson<int>(json['taskId']),
     );
   }
   @override
@@ -518,78 +783,64 @@ class AttendantTableData extends DataClass
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
-      'taskId': serializer.toJson<int>(taskId),
     };
   }
 
-  AttendantTableData copyWith({int? id, String? name, int? taskId}) =>
-      AttendantTableData(
+  RoleTableData copyWith({int? id, String? name}) => RoleTableData(
         id: id ?? this.id,
         name: name ?? this.name,
-        taskId: taskId ?? this.taskId,
       );
-  AttendantTableData copyWithCompanion(AttendantTableCompanion data) {
-    return AttendantTableData(
+  RoleTableData copyWithCompanion(RoleTableCompanion data) {
+    return RoleTableData(
       id: data.id.present ? data.id.value : this.id,
       name: data.name.present ? data.name.value : this.name,
-      taskId: data.taskId.present ? data.taskId.value : this.taskId,
     );
   }
 
   @override
   String toString() {
-    return (StringBuffer('AttendantTableData(')
+    return (StringBuffer('RoleTableData(')
           ..write('id: $id, ')
-          ..write('name: $name, ')
-          ..write('taskId: $taskId')
+          ..write('name: $name')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, taskId);
+  int get hashCode => Object.hash(id, name);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is AttendantTableData &&
+      (other is RoleTableData &&
           other.id == this.id &&
-          other.name == this.name &&
-          other.taskId == this.taskId);
+          other.name == this.name);
 }
 
-class AttendantTableCompanion extends UpdateCompanion<AttendantTableData> {
+class RoleTableCompanion extends UpdateCompanion<RoleTableData> {
   final Value<int> id;
   final Value<String> name;
-  final Value<int> taskId;
-  const AttendantTableCompanion({
+  const RoleTableCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
-    this.taskId = const Value.absent(),
   });
-  AttendantTableCompanion.insert({
+  RoleTableCompanion.insert({
     this.id = const Value.absent(),
     required String name,
-    required int taskId,
-  })  : name = Value(name),
-        taskId = Value(taskId);
-  static Insertable<AttendantTableData> custom({
+  }) : name = Value(name);
+  static Insertable<RoleTableData> custom({
     Expression<int>? id,
     Expression<String>? name,
-    Expression<int>? taskId,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
-      if (taskId != null) 'task_id': taskId,
     });
   }
 
-  AttendantTableCompanion copyWith(
-      {Value<int>? id, Value<String>? name, Value<int>? taskId}) {
-    return AttendantTableCompanion(
+  RoleTableCompanion copyWith({Value<int>? id, Value<String>? name}) {
+    return RoleTableCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
-      taskId: taskId ?? this.taskId,
     );
   }
 
@@ -602,18 +853,240 @@ class AttendantTableCompanion extends UpdateCompanion<AttendantTableData> {
     if (name.present) {
       map['name'] = Variable<String>(name.value);
     }
-    if (taskId.present) {
-      map['task_id'] = Variable<int>(taskId.value);
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RoleTableCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $UserRoleTableTable extends UserRoleTable
+    with TableInfo<$UserRoleTableTable, UserRoleTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $UserRoleTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  @override
+  late final GeneratedColumn<int> userId = GeneratedColumn<int>(
+      'user_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES user_table (id) ON DELETE CASCADE'));
+  static const VerificationMeta _roleIdMeta = const VerificationMeta('roleId');
+  @override
+  late final GeneratedColumn<int> roleId = GeneratedColumn<int>(
+      'role_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES role_table (id) ON DELETE CASCADE'));
+  @override
+  List<GeneratedColumn> get $columns => [id, userId, roleId];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'user_role_table';
+  @override
+  VerificationContext validateIntegrity(Insertable<UserRoleTableData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('user_id')) {
+      context.handle(_userIdMeta,
+          userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
+    } else if (isInserting) {
+      context.missing(_userIdMeta);
+    }
+    if (data.containsKey('role_id')) {
+      context.handle(_roleIdMeta,
+          roleId.isAcceptableOrUnknown(data['role_id']!, _roleIdMeta));
+    } else if (isInserting) {
+      context.missing(_roleIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+        {userId, roleId},
+      ];
+  @override
+  UserRoleTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return UserRoleTableData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      userId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}user_id'])!,
+      roleId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}role_id'])!,
+    );
+  }
+
+  @override
+  $UserRoleTableTable createAlias(String alias) {
+    return $UserRoleTableTable(attachedDatabase, alias);
+  }
+}
+
+class UserRoleTableData extends DataClass
+    implements Insertable<UserRoleTableData> {
+  final int id;
+  final int userId;
+  final int roleId;
+  const UserRoleTableData(
+      {required this.id, required this.userId, required this.roleId});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['user_id'] = Variable<int>(userId);
+    map['role_id'] = Variable<int>(roleId);
+    return map;
+  }
+
+  UserRoleTableCompanion toCompanion(bool nullToAbsent) {
+    return UserRoleTableCompanion(
+      id: Value(id),
+      userId: Value(userId),
+      roleId: Value(roleId),
+    );
+  }
+
+  factory UserRoleTableData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return UserRoleTableData(
+      id: serializer.fromJson<int>(json['id']),
+      userId: serializer.fromJson<int>(json['userId']),
+      roleId: serializer.fromJson<int>(json['roleId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'userId': serializer.toJson<int>(userId),
+      'roleId': serializer.toJson<int>(roleId),
+    };
+  }
+
+  UserRoleTableData copyWith({int? id, int? userId, int? roleId}) =>
+      UserRoleTableData(
+        id: id ?? this.id,
+        userId: userId ?? this.userId,
+        roleId: roleId ?? this.roleId,
+      );
+  UserRoleTableData copyWithCompanion(UserRoleTableCompanion data) {
+    return UserRoleTableData(
+      id: data.id.present ? data.id.value : this.id,
+      userId: data.userId.present ? data.userId.value : this.userId,
+      roleId: data.roleId.present ? data.roleId.value : this.roleId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('UserRoleTableData(')
+          ..write('id: $id, ')
+          ..write('userId: $userId, ')
+          ..write('roleId: $roleId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, userId, roleId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is UserRoleTableData &&
+          other.id == this.id &&
+          other.userId == this.userId &&
+          other.roleId == this.roleId);
+}
+
+class UserRoleTableCompanion extends UpdateCompanion<UserRoleTableData> {
+  final Value<int> id;
+  final Value<int> userId;
+  final Value<int> roleId;
+  const UserRoleTableCompanion({
+    this.id = const Value.absent(),
+    this.userId = const Value.absent(),
+    this.roleId = const Value.absent(),
+  });
+  UserRoleTableCompanion.insert({
+    this.id = const Value.absent(),
+    required int userId,
+    required int roleId,
+  })  : userId = Value(userId),
+        roleId = Value(roleId);
+  static Insertable<UserRoleTableData> custom({
+    Expression<int>? id,
+    Expression<int>? userId,
+    Expression<int>? roleId,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (userId != null) 'user_id': userId,
+      if (roleId != null) 'role_id': roleId,
+    });
+  }
+
+  UserRoleTableCompanion copyWith(
+      {Value<int>? id, Value<int>? userId, Value<int>? roleId}) {
+    return UserRoleTableCompanion(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      roleId: roleId ?? this.roleId,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (userId.present) {
+      map['user_id'] = Variable<int>(userId.value);
+    }
+    if (roleId.present) {
+      map['role_id'] = Variable<int>(roleId.value);
     }
     return map;
   }
 
   @override
   String toString() {
-    return (StringBuffer('AttendantTableCompanion(')
+    return (StringBuffer('UserRoleTableCompanion(')
           ..write('id: $id, ')
-          ..write('name: $name, ')
-          ..write('taskId: $taskId')
+          ..write('userId: $userId, ')
+          ..write('roleId: $roleId')
           ..write(')'))
         .toString();
   }
@@ -622,266 +1095,92 @@ class AttendantTableCompanion extends UpdateCompanion<AttendantTableData> {
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
-  late final $TypeTableTable typeTable = $TypeTableTable(this);
-  late final $TaskTableTable taskTable = $TaskTableTable(this);
-  late final $AttendantTableTable attendantTable = $AttendantTableTable(this);
+  late final $UserTableTable userTable = $UserTableTable(this);
+  late final $RoleTableTable roleTable = $RoleTableTable(this);
+  late final $UserRoleTableTable userRoleTable = $UserRoleTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [typeTable, taskTable, attendantTable];
-}
-
-typedef $$TypeTableTableCreateCompanionBuilder = TypeTableCompanion Function({
-  Value<int> id,
-  required String typeName,
-});
-typedef $$TypeTableTableUpdateCompanionBuilder = TypeTableCompanion Function({
-  Value<int> id,
-  Value<String> typeName,
-});
-
-final class $$TypeTableTableReferences
-    extends BaseReferences<_$AppDatabase, $TypeTableTable, TypeTableData> {
-  $$TypeTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
-
-  static MultiTypedResultKey<$TaskTableTable, List<TaskTableData>>
-      _taskTableRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
-          db.taskTable,
-          aliasName: $_aliasNameGenerator(db.typeTable.id, db.taskTable.type));
-
-  $$TaskTableTableProcessedTableManager get taskTableRefs {
-    final manager = $$TaskTableTableTableManager($_db, $_db.taskTable)
-        .filter((f) => f.type.id.sqlEquals($_itemColumn<int>('id')!));
-
-    final cache = $_typedResult.readTableOrNull(_taskTableRefsTable($_db));
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: cache));
-  }
-}
-
-class $$TypeTableTableFilterComposer
-    extends Composer<_$AppDatabase, $TypeTableTable> {
-  $$TypeTableTableFilterComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnFilters<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<String> get typeName => $composableBuilder(
-      column: $table.typeName, builder: (column) => ColumnFilters(column));
-
-  Expression<bool> taskTableRefs(
-      Expression<bool> Function($$TaskTableTableFilterComposer f) f) {
-    final $$TaskTableTableFilterComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $db.taskTable,
-        getReferencedColumn: (t) => t.type,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$TaskTableTableFilterComposer(
-              $db: $db,
-              $table: $db.taskTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return f(composer);
-  }
-}
-
-class $$TypeTableTableOrderingComposer
-    extends Composer<_$AppDatabase, $TypeTableTable> {
-  $$TypeTableTableOrderingComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnOrderings<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<String> get typeName => $composableBuilder(
-      column: $table.typeName, builder: (column) => ColumnOrderings(column));
-}
-
-class $$TypeTableTableAnnotationComposer
-    extends Composer<_$AppDatabase, $TypeTableTable> {
-  $$TypeTableTableAnnotationComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  GeneratedColumn<int> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
-
-  GeneratedColumn<String> get typeName =>
-      $composableBuilder(column: $table.typeName, builder: (column) => column);
-
-  Expression<T> taskTableRefs<T extends Object>(
-      Expression<T> Function($$TaskTableTableAnnotationComposer a) f) {
-    final $$TaskTableTableAnnotationComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $db.taskTable,
-        getReferencedColumn: (t) => t.type,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$TaskTableTableAnnotationComposer(
-              $db: $db,
-              $table: $db.taskTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return f(composer);
-  }
-}
-
-class $$TypeTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $TypeTableTable,
-    TypeTableData,
-    $$TypeTableTableFilterComposer,
-    $$TypeTableTableOrderingComposer,
-    $$TypeTableTableAnnotationComposer,
-    $$TypeTableTableCreateCompanionBuilder,
-    $$TypeTableTableUpdateCompanionBuilder,
-    (TypeTableData, $$TypeTableTableReferences),
-    TypeTableData,
-    PrefetchHooks Function({bool taskTableRefs})> {
-  $$TypeTableTableTableManager(_$AppDatabase db, $TypeTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          createFilteringComposer: () =>
-              $$TypeTableTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$TypeTableTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$TypeTableTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String> typeName = const Value.absent(),
-          }) =>
-              TypeTableCompanion(
-            id: id,
-            typeName: typeName,
+      [userTable, roleTable, userRoleTable];
+  @override
+  StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
+        [
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('user_table',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('user_role_table', kind: UpdateKind.delete),
+            ],
           ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required String typeName,
-          }) =>
-              TypeTableCompanion.insert(
-            id: id,
-            typeName: typeName,
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('role_table',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('user_role_table', kind: UpdateKind.delete),
+            ],
           ),
-          withReferenceMapper: (p0) => p0
-              .map((e) => (
-                    e.readTable(table),
-                    $$TypeTableTableReferences(db, table, e)
-                  ))
-              .toList(),
-          prefetchHooksCallback: ({taskTableRefs = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [if (taskTableRefs) db.taskTable],
-              addJoins: null,
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (taskTableRefs)
-                    await $_getPrefetchedData<TypeTableData, $TypeTableTable,
-                            TaskTableData>(
-                        currentTable: table,
-                        referencedTable:
-                            $$TypeTableTableReferences._taskTableRefsTable(db),
-                        managerFromTypedResult: (p0) =>
-                            $$TypeTableTableReferences(db, table, p0)
-                                .taskTableRefs,
-                        referencedItemsForCurrentItem:
-                            (item, referencedItems) =>
-                                referencedItems.where((e) => e.type == item.id),
-                        typedResults: items)
-                ];
-              },
-            );
-          },
-        ));
+        ],
+      );
 }
 
-typedef $$TypeTableTableProcessedTableManager = ProcessedTableManager<
-    _$AppDatabase,
-    $TypeTableTable,
-    TypeTableData,
-    $$TypeTableTableFilterComposer,
-    $$TypeTableTableOrderingComposer,
-    $$TypeTableTableAnnotationComposer,
-    $$TypeTableTableCreateCompanionBuilder,
-    $$TypeTableTableUpdateCompanionBuilder,
-    (TypeTableData, $$TypeTableTableReferences),
-    TypeTableData,
-    PrefetchHooks Function({bool taskTableRefs})>;
-typedef $$TaskTableTableCreateCompanionBuilder = TaskTableCompanion Function({
+typedef $$UserTableTableCreateCompanionBuilder = UserTableCompanion Function({
   Value<int> id,
-  required String title,
-  required int type,
+  Value<String?> username,
+  Value<String?> email,
+  Value<String?> firstname,
+  Value<String?> lastname,
+  Value<String?> password,
+  Value<String?> salt,
+  Value<DateTime?> lastLogin,
+  Value<bool> isSuperuser,
+  Value<bool> isStaff,
+  Value<bool> isActive,
+  Value<DateTime?> dateJoined,
+  Value<String?> phoneNumber,
+  Value<bool> isDeleted,
 });
-typedef $$TaskTableTableUpdateCompanionBuilder = TaskTableCompanion Function({
+typedef $$UserTableTableUpdateCompanionBuilder = UserTableCompanion Function({
   Value<int> id,
-  Value<String> title,
-  Value<int> type,
+  Value<String?> username,
+  Value<String?> email,
+  Value<String?> firstname,
+  Value<String?> lastname,
+  Value<String?> password,
+  Value<String?> salt,
+  Value<DateTime?> lastLogin,
+  Value<bool> isSuperuser,
+  Value<bool> isStaff,
+  Value<bool> isActive,
+  Value<DateTime?> dateJoined,
+  Value<String?> phoneNumber,
+  Value<bool> isDeleted,
 });
 
-final class $$TaskTableTableReferences
-    extends BaseReferences<_$AppDatabase, $TaskTableTable, TaskTableData> {
-  $$TaskTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
+final class $$UserTableTableReferences
+    extends BaseReferences<_$AppDatabase, $UserTableTable, UserTableData> {
+  $$UserTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static $TypeTableTable _typeTable(_$AppDatabase db) => db.typeTable
-      .createAlias($_aliasNameGenerator(db.taskTable.type, db.typeTable.id));
-
-  $$TypeTableTableProcessedTableManager get type {
-    final $_column = $_itemColumn<int>('type')!;
-
-    final manager = $$TypeTableTableTableManager($_db, $_db.typeTable)
-        .filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_typeTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: [item]));
-  }
-
-  static MultiTypedResultKey<$AttendantTableTable, List<AttendantTableData>>
-      _attendantTableRefsTable(_$AppDatabase db) =>
-          MultiTypedResultKey.fromTable(db.attendantTable,
+  static MultiTypedResultKey<$UserRoleTableTable, List<UserRoleTableData>>
+      _userRoleTableRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.userRoleTable,
               aliasName: $_aliasNameGenerator(
-                  db.taskTable.id, db.attendantTable.taskId));
+                  db.userTable.id, db.userRoleTable.userId));
 
-  $$AttendantTableTableProcessedTableManager get attendantTableRefs {
-    final manager = $$AttendantTableTableTableManager($_db, $_db.attendantTable)
-        .filter((f) => f.taskId.id.sqlEquals($_itemColumn<int>('id')!));
+  $$UserRoleTableTableProcessedTableManager get userRoleTableRefs {
+    final manager = $$UserRoleTableTableTableManager($_db, $_db.userRoleTable)
+        .filter((f) => f.userId.id.sqlEquals($_itemColumn<int>('id')!));
 
-    final cache = $_typedResult.readTableOrNull(_attendantTableRefsTable($_db));
+    final cache = $_typedResult.readTableOrNull(_userRoleTableRefsTable($_db));
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: cache));
   }
 }
 
-class $$TaskTableTableFilterComposer
-    extends Composer<_$AppDatabase, $TaskTableTable> {
-  $$TaskTableTableFilterComposer({
+class $$UserTableTableFilterComposer
+    extends Composer<_$AppDatabase, $UserTableTable> {
+  $$UserTableTableFilterComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -891,42 +1190,58 @@ class $$TaskTableTableFilterComposer
   ColumnFilters<int> get id => $composableBuilder(
       column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get title => $composableBuilder(
-      column: $table.title, builder: (column) => ColumnFilters(column));
+  ColumnFilters<String> get username => $composableBuilder(
+      column: $table.username, builder: (column) => ColumnFilters(column));
 
-  $$TypeTableTableFilterComposer get type {
-    final $$TypeTableTableFilterComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.type,
-        referencedTable: $db.typeTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$TypeTableTableFilterComposer(
-              $db: $db,
-              $table: $db.typeTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return composer;
-  }
+  ColumnFilters<String> get email => $composableBuilder(
+      column: $table.email, builder: (column) => ColumnFilters(column));
 
-  Expression<bool> attendantTableRefs(
-      Expression<bool> Function($$AttendantTableTableFilterComposer f) f) {
-    final $$AttendantTableTableFilterComposer composer = $composerBuilder(
+  ColumnFilters<String> get firstname => $composableBuilder(
+      column: $table.firstname, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get lastname => $composableBuilder(
+      column: $table.lastname, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get password => $composableBuilder(
+      column: $table.password, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get salt => $composableBuilder(
+      column: $table.salt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get lastLogin => $composableBuilder(
+      column: $table.lastLogin, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isSuperuser => $composableBuilder(
+      column: $table.isSuperuser, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isStaff => $composableBuilder(
+      column: $table.isStaff, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isActive => $composableBuilder(
+      column: $table.isActive, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get dateJoined => $composableBuilder(
+      column: $table.dateJoined, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get phoneNumber => $composableBuilder(
+      column: $table.phoneNumber, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isDeleted => $composableBuilder(
+      column: $table.isDeleted, builder: (column) => ColumnFilters(column));
+
+  Expression<bool> userRoleTableRefs(
+      Expression<bool> Function($$UserRoleTableTableFilterComposer f) f) {
+    final $$UserRoleTableTableFilterComposer composer = $composerBuilder(
         composer: this,
         getCurrentColumn: (t) => t.id,
-        referencedTable: $db.attendantTable,
-        getReferencedColumn: (t) => t.taskId,
+        referencedTable: $db.userRoleTable,
+        getReferencedColumn: (t) => t.userId,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
-            $$AttendantTableTableFilterComposer(
+            $$UserRoleTableTableFilterComposer(
               $db: $db,
-              $table: $db.attendantTable,
+              $table: $db.userRoleTable,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -936,9 +1251,9 @@ class $$TaskTableTableFilterComposer
   }
 }
 
-class $$TaskTableTableOrderingComposer
-    extends Composer<_$AppDatabase, $TaskTableTable> {
-  $$TaskTableTableOrderingComposer({
+class $$UserTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $UserTableTable> {
+  $$UserTableTableOrderingComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -948,33 +1263,49 @@ class $$TaskTableTableOrderingComposer
   ColumnOrderings<int> get id => $composableBuilder(
       column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get title => $composableBuilder(
-      column: $table.title, builder: (column) => ColumnOrderings(column));
+  ColumnOrderings<String> get username => $composableBuilder(
+      column: $table.username, builder: (column) => ColumnOrderings(column));
 
-  $$TypeTableTableOrderingComposer get type {
-    final $$TypeTableTableOrderingComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.type,
-        referencedTable: $db.typeTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$TypeTableTableOrderingComposer(
-              $db: $db,
-              $table: $db.typeTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return composer;
-  }
+  ColumnOrderings<String> get email => $composableBuilder(
+      column: $table.email, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get firstname => $composableBuilder(
+      column: $table.firstname, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get lastname => $composableBuilder(
+      column: $table.lastname, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get password => $composableBuilder(
+      column: $table.password, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get salt => $composableBuilder(
+      column: $table.salt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get lastLogin => $composableBuilder(
+      column: $table.lastLogin, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isSuperuser => $composableBuilder(
+      column: $table.isSuperuser, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isStaff => $composableBuilder(
+      column: $table.isStaff, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isActive => $composableBuilder(
+      column: $table.isActive, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get dateJoined => $composableBuilder(
+      column: $table.dateJoined, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get phoneNumber => $composableBuilder(
+      column: $table.phoneNumber, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isDeleted => $composableBuilder(
+      column: $table.isDeleted, builder: (column) => ColumnOrderings(column));
 }
 
-class $$TaskTableTableAnnotationComposer
-    extends Composer<_$AppDatabase, $TaskTableTable> {
-  $$TaskTableTableAnnotationComposer({
+class $$UserTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $UserTableTable> {
+  $$UserTableTableAnnotationComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -984,42 +1315,58 @@ class $$TaskTableTableAnnotationComposer
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
-  GeneratedColumn<String> get title =>
-      $composableBuilder(column: $table.title, builder: (column) => column);
+  GeneratedColumn<String> get username =>
+      $composableBuilder(column: $table.username, builder: (column) => column);
 
-  $$TypeTableTableAnnotationComposer get type {
-    final $$TypeTableTableAnnotationComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.type,
-        referencedTable: $db.typeTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$TypeTableTableAnnotationComposer(
-              $db: $db,
-              $table: $db.typeTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return composer;
-  }
+  GeneratedColumn<String> get email =>
+      $composableBuilder(column: $table.email, builder: (column) => column);
 
-  Expression<T> attendantTableRefs<T extends Object>(
-      Expression<T> Function($$AttendantTableTableAnnotationComposer a) f) {
-    final $$AttendantTableTableAnnotationComposer composer = $composerBuilder(
+  GeneratedColumn<String> get firstname =>
+      $composableBuilder(column: $table.firstname, builder: (column) => column);
+
+  GeneratedColumn<String> get lastname =>
+      $composableBuilder(column: $table.lastname, builder: (column) => column);
+
+  GeneratedColumn<String> get password =>
+      $composableBuilder(column: $table.password, builder: (column) => column);
+
+  GeneratedColumn<String> get salt =>
+      $composableBuilder(column: $table.salt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get lastLogin =>
+      $composableBuilder(column: $table.lastLogin, builder: (column) => column);
+
+  GeneratedColumn<bool> get isSuperuser => $composableBuilder(
+      column: $table.isSuperuser, builder: (column) => column);
+
+  GeneratedColumn<bool> get isStaff =>
+      $composableBuilder(column: $table.isStaff, builder: (column) => column);
+
+  GeneratedColumn<bool> get isActive =>
+      $composableBuilder(column: $table.isActive, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get dateJoined => $composableBuilder(
+      column: $table.dateJoined, builder: (column) => column);
+
+  GeneratedColumn<String> get phoneNumber => $composableBuilder(
+      column: $table.phoneNumber, builder: (column) => column);
+
+  GeneratedColumn<bool> get isDeleted =>
+      $composableBuilder(column: $table.isDeleted, builder: (column) => column);
+
+  Expression<T> userRoleTableRefs<T extends Object>(
+      Expression<T> Function($$UserRoleTableTableAnnotationComposer a) f) {
+    final $$UserRoleTableTableAnnotationComposer composer = $composerBuilder(
         composer: this,
         getCurrentColumn: (t) => t.id,
-        referencedTable: $db.attendantTable,
-        getReferencedColumn: (t) => t.taskId,
+        referencedTable: $db.userRoleTable,
+        getReferencedColumn: (t) => t.userId,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
-            $$AttendantTableTableAnnotationComposer(
+            $$UserRoleTableTableAnnotationComposer(
               $db: $db,
-              $table: $db.attendantTable,
+              $table: $db.userRoleTable,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -1029,99 +1376,119 @@ class $$TaskTableTableAnnotationComposer
   }
 }
 
-class $$TaskTableTableTableManager extends RootTableManager<
+class $$UserTableTableTableManager extends RootTableManager<
     _$AppDatabase,
-    $TaskTableTable,
-    TaskTableData,
-    $$TaskTableTableFilterComposer,
-    $$TaskTableTableOrderingComposer,
-    $$TaskTableTableAnnotationComposer,
-    $$TaskTableTableCreateCompanionBuilder,
-    $$TaskTableTableUpdateCompanionBuilder,
-    (TaskTableData, $$TaskTableTableReferences),
-    TaskTableData,
-    PrefetchHooks Function({bool type, bool attendantTableRefs})> {
-  $$TaskTableTableTableManager(_$AppDatabase db, $TaskTableTable table)
+    $UserTableTable,
+    UserTableData,
+    $$UserTableTableFilterComposer,
+    $$UserTableTableOrderingComposer,
+    $$UserTableTableAnnotationComposer,
+    $$UserTableTableCreateCompanionBuilder,
+    $$UserTableTableUpdateCompanionBuilder,
+    (UserTableData, $$UserTableTableReferences),
+    UserTableData,
+    PrefetchHooks Function({bool userRoleTableRefs})> {
+  $$UserTableTableTableManager(_$AppDatabase db, $UserTableTable table)
       : super(TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
-              $$TaskTableTableFilterComposer($db: db, $table: table),
+              $$UserTableTableFilterComposer($db: db, $table: table),
           createOrderingComposer: () =>
-              $$TaskTableTableOrderingComposer($db: db, $table: table),
+              $$UserTableTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
-              $$TaskTableTableAnnotationComposer($db: db, $table: table),
+              $$UserTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
-            Value<String> title = const Value.absent(),
-            Value<int> type = const Value.absent(),
+            Value<String?> username = const Value.absent(),
+            Value<String?> email = const Value.absent(),
+            Value<String?> firstname = const Value.absent(),
+            Value<String?> lastname = const Value.absent(),
+            Value<String?> password = const Value.absent(),
+            Value<String?> salt = const Value.absent(),
+            Value<DateTime?> lastLogin = const Value.absent(),
+            Value<bool> isSuperuser = const Value.absent(),
+            Value<bool> isStaff = const Value.absent(),
+            Value<bool> isActive = const Value.absent(),
+            Value<DateTime?> dateJoined = const Value.absent(),
+            Value<String?> phoneNumber = const Value.absent(),
+            Value<bool> isDeleted = const Value.absent(),
           }) =>
-              TaskTableCompanion(
+              UserTableCompanion(
             id: id,
-            title: title,
-            type: type,
+            username: username,
+            email: email,
+            firstname: firstname,
+            lastname: lastname,
+            password: password,
+            salt: salt,
+            lastLogin: lastLogin,
+            isSuperuser: isSuperuser,
+            isStaff: isStaff,
+            isActive: isActive,
+            dateJoined: dateJoined,
+            phoneNumber: phoneNumber,
+            isDeleted: isDeleted,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
-            required String title,
-            required int type,
+            Value<String?> username = const Value.absent(),
+            Value<String?> email = const Value.absent(),
+            Value<String?> firstname = const Value.absent(),
+            Value<String?> lastname = const Value.absent(),
+            Value<String?> password = const Value.absent(),
+            Value<String?> salt = const Value.absent(),
+            Value<DateTime?> lastLogin = const Value.absent(),
+            Value<bool> isSuperuser = const Value.absent(),
+            Value<bool> isStaff = const Value.absent(),
+            Value<bool> isActive = const Value.absent(),
+            Value<DateTime?> dateJoined = const Value.absent(),
+            Value<String?> phoneNumber = const Value.absent(),
+            Value<bool> isDeleted = const Value.absent(),
           }) =>
-              TaskTableCompanion.insert(
+              UserTableCompanion.insert(
             id: id,
-            title: title,
-            type: type,
+            username: username,
+            email: email,
+            firstname: firstname,
+            lastname: lastname,
+            password: password,
+            salt: salt,
+            lastLogin: lastLogin,
+            isSuperuser: isSuperuser,
+            isStaff: isStaff,
+            isActive: isActive,
+            dateJoined: dateJoined,
+            phoneNumber: phoneNumber,
+            isDeleted: isDeleted,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (
                     e.readTable(table),
-                    $$TaskTableTableReferences(db, table, e)
+                    $$UserTableTableReferences(db, table, e)
                   ))
               .toList(),
-          prefetchHooksCallback: ({type = false, attendantTableRefs = false}) {
+          prefetchHooksCallback: ({userRoleTableRefs = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [
-                if (attendantTableRefs) db.attendantTable
+                if (userRoleTableRefs) db.userRoleTable
               ],
-              addJoins: <
-                  T extends TableManagerState<
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic>>(state) {
-                if (type) {
-                  state = state.withJoin(
-                    currentTable: table,
-                    currentColumn: table.type,
-                    referencedTable: $$TaskTableTableReferences._typeTable(db),
-                    referencedColumn:
-                        $$TaskTableTableReferences._typeTable(db).id,
-                  ) as T;
-                }
-
-                return state;
-              },
+              addJoins: null,
               getPrefetchedDataCallback: (items) async {
                 return [
-                  if (attendantTableRefs)
-                    await $_getPrefetchedData<TaskTableData, $TaskTableTable,
-                            AttendantTableData>(
+                  if (userRoleTableRefs)
+                    await $_getPrefetchedData<UserTableData, $UserTableTable,
+                            UserRoleTableData>(
                         currentTable: table,
-                        referencedTable: $$TaskTableTableReferences
-                            ._attendantTableRefsTable(db),
+                        referencedTable: $$UserTableTableReferences
+                            ._userRoleTableRefsTable(db),
                         managerFromTypedResult: (p0) =>
-                            $$TaskTableTableReferences(db, table, p0)
-                                .attendantTableRefs,
+                            $$UserTableTableReferences(db, table, p0)
+                                .userRoleTableRefs,
                         referencedItemsForCurrentItem: (item,
                                 referencedItems) =>
-                            referencedItems.where((e) => e.taskId == item.id),
+                            referencedItems.where((e) => e.userId == item.id),
                         typedResults: items)
                 ];
               },
@@ -1130,55 +1497,50 @@ class $$TaskTableTableTableManager extends RootTableManager<
         ));
 }
 
-typedef $$TaskTableTableProcessedTableManager = ProcessedTableManager<
+typedef $$UserTableTableProcessedTableManager = ProcessedTableManager<
     _$AppDatabase,
-    $TaskTableTable,
-    TaskTableData,
-    $$TaskTableTableFilterComposer,
-    $$TaskTableTableOrderingComposer,
-    $$TaskTableTableAnnotationComposer,
-    $$TaskTableTableCreateCompanionBuilder,
-    $$TaskTableTableUpdateCompanionBuilder,
-    (TaskTableData, $$TaskTableTableReferences),
-    TaskTableData,
-    PrefetchHooks Function({bool type, bool attendantTableRefs})>;
-typedef $$AttendantTableTableCreateCompanionBuilder = AttendantTableCompanion
-    Function({
+    $UserTableTable,
+    UserTableData,
+    $$UserTableTableFilterComposer,
+    $$UserTableTableOrderingComposer,
+    $$UserTableTableAnnotationComposer,
+    $$UserTableTableCreateCompanionBuilder,
+    $$UserTableTableUpdateCompanionBuilder,
+    (UserTableData, $$UserTableTableReferences),
+    UserTableData,
+    PrefetchHooks Function({bool userRoleTableRefs})>;
+typedef $$RoleTableTableCreateCompanionBuilder = RoleTableCompanion Function({
   Value<int> id,
   required String name,
-  required int taskId,
 });
-typedef $$AttendantTableTableUpdateCompanionBuilder = AttendantTableCompanion
-    Function({
+typedef $$RoleTableTableUpdateCompanionBuilder = RoleTableCompanion Function({
   Value<int> id,
   Value<String> name,
-  Value<int> taskId,
 });
 
-final class $$AttendantTableTableReferences extends BaseReferences<
-    _$AppDatabase, $AttendantTableTable, AttendantTableData> {
-  $$AttendantTableTableReferences(
-      super.$_db, super.$_table, super.$_typedResult);
+final class $$RoleTableTableReferences
+    extends BaseReferences<_$AppDatabase, $RoleTableTable, RoleTableData> {
+  $$RoleTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static $TaskTableTable _taskIdTable(_$AppDatabase db) =>
-      db.taskTable.createAlias(
-          $_aliasNameGenerator(db.attendantTable.taskId, db.taskTable.id));
+  static MultiTypedResultKey<$UserRoleTableTable, List<UserRoleTableData>>
+      _userRoleTableRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.userRoleTable,
+              aliasName: $_aliasNameGenerator(
+                  db.roleTable.id, db.userRoleTable.roleId));
 
-  $$TaskTableTableProcessedTableManager get taskId {
-    final $_column = $_itemColumn<int>('task_id')!;
+  $$UserRoleTableTableProcessedTableManager get userRoleTableRefs {
+    final manager = $$UserRoleTableTableTableManager($_db, $_db.userRoleTable)
+        .filter((f) => f.roleId.id.sqlEquals($_itemColumn<int>('id')!));
 
-    final manager = $$TaskTableTableTableManager($_db, $_db.taskTable)
-        .filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_taskIdTable($_db));
-    if (item == null) return manager;
+    final cache = $_typedResult.readTableOrNull(_userRoleTableRefsTable($_db));
     return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: [item]));
+        manager.$state.copyWith(prefetchedData: cache));
   }
 }
 
-class $$AttendantTableTableFilterComposer
-    extends Composer<_$AppDatabase, $AttendantTableTable> {
-  $$AttendantTableTableFilterComposer({
+class $$RoleTableTableFilterComposer
+    extends Composer<_$AppDatabase, $RoleTableTable> {
+  $$RoleTableTableFilterComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -1191,30 +1553,31 @@ class $$AttendantTableTableFilterComposer
   ColumnFilters<String> get name => $composableBuilder(
       column: $table.name, builder: (column) => ColumnFilters(column));
 
-  $$TaskTableTableFilterComposer get taskId {
-    final $$TaskTableTableFilterComposer composer = $composerBuilder(
+  Expression<bool> userRoleTableRefs(
+      Expression<bool> Function($$UserRoleTableTableFilterComposer f) f) {
+    final $$UserRoleTableTableFilterComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.taskId,
-        referencedTable: $db.taskTable,
-        getReferencedColumn: (t) => t.id,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.userRoleTable,
+        getReferencedColumn: (t) => t.roleId,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
-            $$TaskTableTableFilterComposer(
+            $$UserRoleTableTableFilterComposer(
               $db: $db,
-              $table: $db.taskTable,
+              $table: $db.userRoleTable,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
                   $removeJoinBuilderFromRootComposer,
             ));
-    return composer;
+    return f(composer);
   }
 }
 
-class $$AttendantTableTableOrderingComposer
-    extends Composer<_$AppDatabase, $AttendantTableTable> {
-  $$AttendantTableTableOrderingComposer({
+class $$RoleTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $RoleTableTable> {
+  $$RoleTableTableOrderingComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -1226,31 +1589,11 @@ class $$AttendantTableTableOrderingComposer
 
   ColumnOrderings<String> get name => $composableBuilder(
       column: $table.name, builder: (column) => ColumnOrderings(column));
-
-  $$TaskTableTableOrderingComposer get taskId {
-    final $$TaskTableTableOrderingComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.taskId,
-        referencedTable: $db.taskTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$TaskTableTableOrderingComposer(
-              $db: $db,
-              $table: $db.taskTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return composer;
-  }
 }
 
-class $$AttendantTableTableAnnotationComposer
-    extends Composer<_$AppDatabase, $AttendantTableTable> {
-  $$AttendantTableTableAnnotationComposer({
+class $$RoleTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $RoleTableTable> {
+  $$RoleTableTableAnnotationComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -1263,18 +1606,206 @@ class $$AttendantTableTableAnnotationComposer
   GeneratedColumn<String> get name =>
       $composableBuilder(column: $table.name, builder: (column) => column);
 
-  $$TaskTableTableAnnotationComposer get taskId {
-    final $$TaskTableTableAnnotationComposer composer = $composerBuilder(
+  Expression<T> userRoleTableRefs<T extends Object>(
+      Expression<T> Function($$UserRoleTableTableAnnotationComposer a) f) {
+    final $$UserRoleTableTableAnnotationComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.taskId,
-        referencedTable: $db.taskTable,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.userRoleTable,
+        getReferencedColumn: (t) => t.roleId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$UserRoleTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.userRoleTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$RoleTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $RoleTableTable,
+    RoleTableData,
+    $$RoleTableTableFilterComposer,
+    $$RoleTableTableOrderingComposer,
+    $$RoleTableTableAnnotationComposer,
+    $$RoleTableTableCreateCompanionBuilder,
+    $$RoleTableTableUpdateCompanionBuilder,
+    (RoleTableData, $$RoleTableTableReferences),
+    RoleTableData,
+    PrefetchHooks Function({bool userRoleTableRefs})> {
+  $$RoleTableTableTableManager(_$AppDatabase db, $RoleTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$RoleTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$RoleTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$RoleTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> name = const Value.absent(),
+          }) =>
+              RoleTableCompanion(
+            id: id,
+            name: name,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String name,
+          }) =>
+              RoleTableCompanion.insert(
+            id: id,
+            name: name,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$RoleTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({userRoleTableRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (userRoleTableRefs) db.userRoleTable
+              ],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (userRoleTableRefs)
+                    await $_getPrefetchedData<RoleTableData, $RoleTableTable,
+                            UserRoleTableData>(
+                        currentTable: table,
+                        referencedTable: $$RoleTableTableReferences
+                            ._userRoleTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$RoleTableTableReferences(db, table, p0)
+                                .userRoleTableRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.roleId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$RoleTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $RoleTableTable,
+    RoleTableData,
+    $$RoleTableTableFilterComposer,
+    $$RoleTableTableOrderingComposer,
+    $$RoleTableTableAnnotationComposer,
+    $$RoleTableTableCreateCompanionBuilder,
+    $$RoleTableTableUpdateCompanionBuilder,
+    (RoleTableData, $$RoleTableTableReferences),
+    RoleTableData,
+    PrefetchHooks Function({bool userRoleTableRefs})>;
+typedef $$UserRoleTableTableCreateCompanionBuilder = UserRoleTableCompanion
+    Function({
+  Value<int> id,
+  required int userId,
+  required int roleId,
+});
+typedef $$UserRoleTableTableUpdateCompanionBuilder = UserRoleTableCompanion
+    Function({
+  Value<int> id,
+  Value<int> userId,
+  Value<int> roleId,
+});
+
+final class $$UserRoleTableTableReferences extends BaseReferences<_$AppDatabase,
+    $UserRoleTableTable, UserRoleTableData> {
+  $$UserRoleTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $UserTableTable _userIdTable(_$AppDatabase db) =>
+      db.userTable.createAlias(
+          $_aliasNameGenerator(db.userRoleTable.userId, db.userTable.id));
+
+  $$UserTableTableProcessedTableManager get userId {
+    final $_column = $_itemColumn<int>('user_id')!;
+
+    final manager = $$UserTableTableTableManager($_db, $_db.userTable)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_userIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $RoleTableTable _roleIdTable(_$AppDatabase db) =>
+      db.roleTable.createAlias(
+          $_aliasNameGenerator(db.userRoleTable.roleId, db.roleTable.id));
+
+  $$RoleTableTableProcessedTableManager get roleId {
+    final $_column = $_itemColumn<int>('role_id')!;
+
+    final manager = $$RoleTableTableTableManager($_db, $_db.roleTable)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_roleIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$UserRoleTableTableFilterComposer
+    extends Composer<_$AppDatabase, $UserRoleTableTable> {
+  $$UserRoleTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  $$UserTableTableFilterComposer get userId {
+    final $$UserTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.userId,
+        referencedTable: $db.userTable,
         getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
-            $$TaskTableTableAnnotationComposer(
+            $$UserTableTableFilterComposer(
               $db: $db,
-              $table: $db.taskTable,
+              $table: $db.userTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$RoleTableTableFilterComposer get roleId {
+    final $$RoleTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.roleId,
+        referencedTable: $db.roleTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$RoleTableTableFilterComposer(
+              $db: $db,
+              $table: $db.roleTable,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -1284,56 +1815,161 @@ class $$AttendantTableTableAnnotationComposer
   }
 }
 
-class $$AttendantTableTableTableManager extends RootTableManager<
+class $$UserRoleTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $UserRoleTableTable> {
+  $$UserRoleTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  $$UserTableTableOrderingComposer get userId {
+    final $$UserTableTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.userId,
+        referencedTable: $db.userTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$UserTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.userTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$RoleTableTableOrderingComposer get roleId {
+    final $$RoleTableTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.roleId,
+        referencedTable: $db.roleTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$RoleTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.roleTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$UserRoleTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $UserRoleTableTable> {
+  $$UserRoleTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  $$UserTableTableAnnotationComposer get userId {
+    final $$UserTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.userId,
+        referencedTable: $db.userTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$UserTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.userTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$RoleTableTableAnnotationComposer get roleId {
+    final $$RoleTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.roleId,
+        referencedTable: $db.roleTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$RoleTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.roleTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$UserRoleTableTableTableManager extends RootTableManager<
     _$AppDatabase,
-    $AttendantTableTable,
-    AttendantTableData,
-    $$AttendantTableTableFilterComposer,
-    $$AttendantTableTableOrderingComposer,
-    $$AttendantTableTableAnnotationComposer,
-    $$AttendantTableTableCreateCompanionBuilder,
-    $$AttendantTableTableUpdateCompanionBuilder,
-    (AttendantTableData, $$AttendantTableTableReferences),
-    AttendantTableData,
-    PrefetchHooks Function({bool taskId})> {
-  $$AttendantTableTableTableManager(
-      _$AppDatabase db, $AttendantTableTable table)
+    $UserRoleTableTable,
+    UserRoleTableData,
+    $$UserRoleTableTableFilterComposer,
+    $$UserRoleTableTableOrderingComposer,
+    $$UserRoleTableTableAnnotationComposer,
+    $$UserRoleTableTableCreateCompanionBuilder,
+    $$UserRoleTableTableUpdateCompanionBuilder,
+    (UserRoleTableData, $$UserRoleTableTableReferences),
+    UserRoleTableData,
+    PrefetchHooks Function({bool userId, bool roleId})> {
+  $$UserRoleTableTableTableManager(_$AppDatabase db, $UserRoleTableTable table)
       : super(TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
-              $$AttendantTableTableFilterComposer($db: db, $table: table),
+              $$UserRoleTableTableFilterComposer($db: db, $table: table),
           createOrderingComposer: () =>
-              $$AttendantTableTableOrderingComposer($db: db, $table: table),
+              $$UserRoleTableTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
-              $$AttendantTableTableAnnotationComposer($db: db, $table: table),
+              $$UserRoleTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
-            Value<String> name = const Value.absent(),
-            Value<int> taskId = const Value.absent(),
+            Value<int> userId = const Value.absent(),
+            Value<int> roleId = const Value.absent(),
           }) =>
-              AttendantTableCompanion(
+              UserRoleTableCompanion(
             id: id,
-            name: name,
-            taskId: taskId,
+            userId: userId,
+            roleId: roleId,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
-            required String name,
-            required int taskId,
+            required int userId,
+            required int roleId,
           }) =>
-              AttendantTableCompanion.insert(
+              UserRoleTableCompanion.insert(
             id: id,
-            name: name,
-            taskId: taskId,
+            userId: userId,
+            roleId: roleId,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (
                     e.readTable(table),
-                    $$AttendantTableTableReferences(db, table, e)
+                    $$UserRoleTableTableReferences(db, table, e)
                   ))
               .toList(),
-          prefetchHooksCallback: ({taskId = false}) {
+          prefetchHooksCallback: ({userId = false, roleId = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [],
@@ -1350,14 +1986,24 @@ class $$AttendantTableTableTableManager extends RootTableManager<
                       dynamic,
                       dynamic,
                       dynamic>>(state) {
-                if (taskId) {
+                if (userId) {
                   state = state.withJoin(
                     currentTable: table,
-                    currentColumn: table.taskId,
+                    currentColumn: table.userId,
                     referencedTable:
-                        $$AttendantTableTableReferences._taskIdTable(db),
+                        $$UserRoleTableTableReferences._userIdTable(db),
                     referencedColumn:
-                        $$AttendantTableTableReferences._taskIdTable(db).id,
+                        $$UserRoleTableTableReferences._userIdTable(db).id,
+                  ) as T;
+                }
+                if (roleId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.roleId,
+                    referencedTable:
+                        $$UserRoleTableTableReferences._roleIdTable(db),
+                    referencedColumn:
+                        $$UserRoleTableTableReferences._roleIdTable(db).id,
                   ) as T;
                 }
 
@@ -1371,26 +2017,26 @@ class $$AttendantTableTableTableManager extends RootTableManager<
         ));
 }
 
-typedef $$AttendantTableTableProcessedTableManager = ProcessedTableManager<
+typedef $$UserRoleTableTableProcessedTableManager = ProcessedTableManager<
     _$AppDatabase,
-    $AttendantTableTable,
-    AttendantTableData,
-    $$AttendantTableTableFilterComposer,
-    $$AttendantTableTableOrderingComposer,
-    $$AttendantTableTableAnnotationComposer,
-    $$AttendantTableTableCreateCompanionBuilder,
-    $$AttendantTableTableUpdateCompanionBuilder,
-    (AttendantTableData, $$AttendantTableTableReferences),
-    AttendantTableData,
-    PrefetchHooks Function({bool taskId})>;
+    $UserRoleTableTable,
+    UserRoleTableData,
+    $$UserRoleTableTableFilterComposer,
+    $$UserRoleTableTableOrderingComposer,
+    $$UserRoleTableTableAnnotationComposer,
+    $$UserRoleTableTableCreateCompanionBuilder,
+    $$UserRoleTableTableUpdateCompanionBuilder,
+    (UserRoleTableData, $$UserRoleTableTableReferences),
+    UserRoleTableData,
+    PrefetchHooks Function({bool userId, bool roleId})>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
   $AppDatabaseManager(this._db);
-  $$TypeTableTableTableManager get typeTable =>
-      $$TypeTableTableTableManager(_db, _db.typeTable);
-  $$TaskTableTableTableManager get taskTable =>
-      $$TaskTableTableTableManager(_db, _db.taskTable);
-  $$AttendantTableTableTableManager get attendantTable =>
-      $$AttendantTableTableTableManager(_db, _db.attendantTable);
+  $$UserTableTableTableManager get userTable =>
+      $$UserTableTableTableManager(_db, _db.userTable);
+  $$RoleTableTableTableManager get roleTable =>
+      $$RoleTableTableTableManager(_db, _db.roleTable);
+  $$UserRoleTableTableTableManager get userRoleTable =>
+      $$UserRoleTableTableTableManager(_db, _db.userRoleTable);
 }
