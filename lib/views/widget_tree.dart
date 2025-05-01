@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_ubuntu_app/data/constant.dart';
 import 'package:my_ubuntu_app/data/notifier.dart';
 import 'package:my_ubuntu_app/views/pages/home_page.dart';
+// import 'package:my_ubuntu_app/views/pages/list_view.dart';
 import 'package:my_ubuntu_app/views/pages/login_page.dart';
 import 'package:my_ubuntu_app/views/pages/profile_page.dart';
 import 'package:my_ubuntu_app/views/pages/settings_page.dart';
@@ -9,6 +10,13 @@ import 'package:my_ubuntu_app/views/pages/settings_page.dart';
 // import 'package:my_ubuntu_app/views/pages/task_page_with_pagination.dart';
 // import 'package:my_ubuntu_app/views/pages/task_page_with_pagination_provider.dart';
 import 'package:my_ubuntu_app/views/pages/user_page.dart';
+import 'package:my_ubuntu_app/views/pages/user_page_scroll.dart';
+import 'package:my_ubuntu_app/views/pages/user_page_scroll2.dart';
+import 'package:my_ubuntu_app/views/pages/user_page_scroll3.dart';
+import 'package:my_ubuntu_app/views/pages/user_page_scroll4.dart';
+import 'package:my_ubuntu_app/views/pages/weight_scale_page.dart';
+import 'package:my_ubuntu_app/views/pages/weight_scale_page2.dart';
+import 'package:my_ubuntu_app/views/pages/weight_scale_page3.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'widgets/navbar_widget.dart';
@@ -16,10 +24,16 @@ import 'widgets/navbar_widget.dart';
 List<Widget> pages = [
   HomePage(),
   ProfilePage(),
-  UserListPaginationwithProvider()
-  // TaskListPage(),
-  // TaskListPagination(),
-  // TaskListPaginationwithProvider(),
+  UserListPaginationwithProvider(),
+  // UserList(),
+  // ListViewScreen2(),
+  InfiniteScrollPaginationView(),
+  InfiniteScrollPaginationView2(),
+  InfiniteScrollPaginationView3(),
+  InfiniteScrollPaginationView4(),
+  WeightReaderPage(),
+  ScaleReaderScreen(),
+  WeightReaderPage3(),
 ];
 
 class WidgetTree extends StatelessWidget {

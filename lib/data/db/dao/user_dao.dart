@@ -15,75 +15,111 @@ class UserDao {
  
 
   
+  List<Expression<bool>> getfilter (Map<String, String>? filters) {
+    final List<Expression<bool>> whereClauses = [];
+    if (filters != null && filters.isNotEmpty) {
+      if (filters.containsKey('username')) {
+        whereClauses.add(_database.userTable.username.like('%${filters['username']}%'));
+      }
+      if (filters.containsKey('email')) {
+        whereClauses.add(_database.userTable.email.like('%${filters['email']}%'));
+      }
+      if (filters.containsKey('firstname')) {
+        whereClauses.add(_database.userTable.firstname.like('%${filters['firstname']}%'));
+      }
+      if (filters.containsKey('lastname')) {
+        whereClauses.add(_database.userTable.lastname.like('%${filters['lastname']}%'));
+      }
+    }
+    return whereClauses;
+  }
 
 
-  Future<int> getUserCount() async {
+  Future<int> getUserCount({Map<String, String>? filters}) async {
     final query = _database.selectOnly(_database.userTable)..addColumns([_database.userTable.id.count()]);
+    if (filters != null && filters.isNotEmpty) {
+      final List<Expression<bool>> whereClauses = getfilter(filters); // Directly call getfilter
+      print("************whereClauses*******$whereClauses***");
+      print(whereClauses.reduce((a, b) => a & b));
+      
+      if (whereClauses.isNotEmpty) {
+        query.where(whereClauses.reduce((a, b) => a & b));
+      }
+    }
     final result = await query.getSingle();
     return result.read(_database.userTable.id.count()) ?? 0;
   }
 
   // Get paginated users
+  // Get paginated users
   Future<List<UserWithRolesModel>> getPaginatedUsers({
     required int page,
     required int pageSize,
+    Map<String, String>? filters,
   }) async {
-      final offset = page * pageSize;
-      print("Offset: $offset");
-      print("Page size: $pageSize");
-      print("Page: $page");
+    final offset = page * pageSize;
+    print("Offset: $offset");
+    print("Page size: $pageSize");
+    print("Page: $page");
 
-      // 1. Fetch users with pagination
-      final userQuery = (_database.select(_database.userTable)
+    // 1. Fetch users with pagination
+    final userQuery = (_database.select(_database.userTable)
       ..orderBy([(t) => OrderingTerm.desc(t.id)])
       ..limit(pageSize, offset: offset));
 
-      final users = await userQuery.get();
-      if (users.isEmpty) {
-        return [];
+    if (filters != null && filters.isNotEmpty) {
+      final List<Expression<bool>> whereClauses = getfilter(filters); // Directly call getfilter
+      if (whereClauses.isNotEmpty) {
+        userQuery.where((tbl) => whereClauses.reduce((a, b) => a & b)); // Corrected line
       }
-
-      // 2. Fetch roles for the retrieved users in a single query
-      final userIds = users.map((user) => user.id).toList();
-      final rolesQuery = (_database.select(_database.userRoleTable)
-            ..where((tbl) => tbl.userId.isIn(userIds)))
-          .join([
-            innerJoin(_database.roleTable,
-                _database.userRoleTable.roleId.equalsExp(_database.roleTable.id)),
-          ]);
-
-      final roleResults = await rolesQuery.get();
-
-      // 3. Combine the results
-      final Map<int, UserWithRolesModel> userMap = {};
-      for (final user in users) {
-        userMap[user.id] = UserWithRolesModel(
-            id: user.id, 
-            username: user.username,
-            email: user.email,
-            firstname: user.firstname,
-            lastname: user.lastname,
-            lastLogin: user.lastLogin,
-            isSuperuser: user.isSuperuser,
-            isStaff: user.isStaff,
-            isActive: user.isActive,
-            dateJoined: user.dateJoined,
-            phoneNumber: user.phoneNumber,
-            isDeleted: user.isDeleted,  
-            roles: []
-          );
-      }
-
-      for (final row in roleResults) {
-        final userId = row.readTable(_database.userRoleTable).userId;
-        final role = row.readTable(_database.roleTable);
-        if (userMap.containsKey(userId)) {
-          userMap[userId]!.roles.add(RoleModel(id: role.id, name: role.name));
-        }
-      }
-
-      return userMap.values.toList();
     }
+
+    final users = await userQuery.get();
+    if (users.isEmpty) {
+      return [];
+    }
+
+    // 2. Fetch roles for the retrieved users in a single query
+    final userIds = users.map((user) => user.id).toList();
+    final rolesQuery = (_database.select(_database.userRoleTable)
+          ..where((tbl) => tbl.userId.isIn(userIds)))
+        .join([
+          innerJoin(_database.roleTable,
+              _database.userRoleTable.roleId.equalsExp(_database.roleTable.id)),
+        ]);
+
+    final roleResults = await rolesQuery.get();
+
+    // 3. Combine the results
+    final Map<int, UserWithRolesModel> userMap = {};
+    for (final user in users) {
+      userMap[user.id] = UserWithRolesModel(
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          firstname: user.firstname,
+          lastname: user.lastname,
+          lastLogin: user.lastLogin,
+          isSuperuser: user.isSuperuser,
+          isStaff: user.isStaff,
+          isActive: user.isActive,
+          dateJoined: user.dateJoined,
+          phoneNumber: user.phoneNumber,
+          isDeleted: user.isDeleted,
+          roles: []
+        );
+    }
+
+    for (final row in roleResults) {
+      final userId = row.readTable(_database.userRoleTable).userId;
+      final role = row.readTable(_database.roleTable);
+      if (userMap.containsKey(userId)) {
+        userMap[userId]!.roles.add(RoleModel(id: role.id, name: role.name));
+      }
+    }
+
+    return userMap.values.toList();
+  }
 
   Future<int> insertUser({
     required String username,

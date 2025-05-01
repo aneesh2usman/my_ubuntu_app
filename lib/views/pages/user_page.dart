@@ -2,21 +2,73 @@ import 'package:flutter/material.dart';
 import 'package:my_ubuntu_app/views/providers/userlistprovider.dart';
 import 'package:my_ubuntu_app/widgets/users/add_user_popup.dart';
 import 'package:my_ubuntu_app/widgets/users/edit_user_popup.dart';
+import 'package:my_ubuntu_app/widgets/users/filter_user.dart';
 import 'package:provider/provider.dart';
-
-class UserListPaginationwithProvider extends StatelessWidget {
+class UserListPaginationwithProvider extends StatefulWidget {
   const UserListPaginationwithProvider({super.key});
+
+  @override
+  State<UserListPaginationwithProvider> createState() => _UserListPaginationWithMultipleFiltersState();
+}
+class _UserListPaginationWithMultipleFiltersState extends State<UserListPaginationwithProvider> {
+  final TextEditingController _usernameFilterController = TextEditingController();
+  final TextEditingController _emailFilterController = TextEditingController();
+  final TextEditingController _firstNameFilterController = TextEditingController();
+  final TextEditingController _lastNameFilterController = TextEditingController();
+  final TextEditingController _phoneFilterController = TextEditingController();
+
+  @override
+  void dispose() {
+    _usernameFilterController.dispose();
+    _emailFilterController.dispose();
+    _firstNameFilterController.dispose();
+    _lastNameFilterController.dispose();
+    _phoneFilterController.dispose();
+    super.dispose();
+  }
+
+  void _applyFilters(UserListProvider userProvider) {
+    userProvider.filter(
+      username: _usernameFilterController.text,
+      email: _emailFilterController.text,
+      firstName: _firstNameFilterController.text,
+      lastName: _lastNameFilterController.text,
+      phone: _phoneFilterController.text,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => UserListProvider(),
-      child: _UserListPaginationConsumer(),
+      child: _UserListPaginationConsumer(
+        usernameFilterController: _usernameFilterController,
+        emailFilterController: _emailFilterController,
+        firstNameFilterController: _firstNameFilterController,
+        lastNameFilterController: _lastNameFilterController,
+        phoneFilterController: _phoneFilterController,
+        applyFilters: _applyFilters,
+      ),
     );
   }
 }
 
 class _UserListPaginationConsumer extends StatelessWidget {
+  final TextEditingController usernameFilterController;
+  final TextEditingController emailFilterController;
+  final TextEditingController firstNameFilterController;
+  final TextEditingController lastNameFilterController;
+  final TextEditingController phoneFilterController;
+  final Function(UserListProvider) applyFilters;
+
+  const _UserListPaginationConsumer({
+    required this.usernameFilterController,
+    required this.emailFilterController,
+    required this.firstNameFilterController,
+    required this.lastNameFilterController,
+    required this.phoneFilterController,
+    required this.applyFilters,
+  });
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserListProvider>(context);
@@ -34,6 +86,15 @@ class _UserListPaginationConsumer extends StatelessWidget {
       ),
       body: Column(
         children: [
+          UserListFilter(
+            userProvider: userProvider,
+            usernameFilterController: usernameFilterController,
+            emailFilterController: emailFilterController,
+            firstNameFilterController: firstNameFilterController,
+            lastNameFilterController: lastNameFilterController,
+            phoneFilterController: phoneFilterController,
+            applyFilters: applyFilters,
+          ),
           if (userProvider.isLoading)
             const LinearProgressIndicator(minHeight: 4),
           Expanded(
