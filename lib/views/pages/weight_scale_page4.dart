@@ -12,7 +12,6 @@ Stream<String> serialReadlines(
   final subscription = reader.stream.listen(
     (data) {
       buffer += String.fromCharCodes(data);
-
       int index;
       while ((index = buffer.indexOf(terminator)) != -1) {
         final line = buffer.substring(0, index).trim();
@@ -29,72 +28,81 @@ Stream<String> serialReadlines(
   return controller.stream;
 }
 
-class WeightReaderPage3 extends StatefulWidget {
+class WeightReaderPage4 extends StatefulWidget {
   @override
-  _WeightReaderPage3State createState() => _WeightReaderPage3State();
+  _WeightReaderPage4State createState() => _WeightReaderPage4State();
 }
 
-class _WeightReaderPage3State extends State<WeightReaderPage3> {
+class _WeightReaderPage4State extends State<WeightReaderPage4> {
   List<String> availablePorts = [];
   String? selectedPort;
   SerialPort? _port;
-  SerialPortReader? reader;
+  SerialPortReader? _reader;
+  StreamSubscription<String>? _subscription;
   String weightOutput = 'Waiting for data...';
-  String _serialBuffer = '';
   bool isConnected = false;
 
   @override
   void initState() {
     super.initState();
-    _listPorts();
+    _listAvailablePorts();
   }
 
-  void _listPorts() {
+  void _listAvailablePorts() {
     setState(() {
       availablePorts = SerialPort.availablePorts;
     });
   }
 
-  void _connectToPort(String portName) {
-    _port = SerialPort(portName);
-    if (!_port!.openReadWrite()) {
-      setState(() {
-        print('Failed to open port: ${SerialPort.lastError}');
-        weightOutput = 'Failed to open port: ${SerialPort.lastError}';
-      });
-      return;
-    }
+  Future<void> _connectToPort(String portName) async {
+    final port = SerialPort(portName);
 
-    final config = _port!.config;
+    // Set port configuration BEFORE opening
+    final config = port.config;
     config.baudRate = 9600;
     config.bits = 8;
     config.parity = SerialPortParity.none;
     config.stopBits = 1;
     config.setFlowControl(SerialPortFlowControl.none);
-    _port!.config = config;
+    port.config = config;
 
-    reader?.close();
-    reader = SerialPortReader(_port!);
-    serialReadlines(reader!).listen((line) {
-      print('Line: $line');
+    // Add slight delay before opening
+    await Future.delayed(Duration(milliseconds: 500));
+
+    if (!port.openReadWrite()) {
+      setState(() {
+        weightOutput = 'Failed to open port: ${SerialPort.lastError}';
+      });
+      return;
+    }
+
+    final reader = SerialPortReader(port);
+    final subscription = serialReadlines(reader).listen((line) {
+      print('Line received: $line');
       setState(() {
         weightOutput = line;
       });
     });
 
     setState(() {
-      selectedPort = portName;
+      _port = port;
+      _reader = reader;
+      _subscription = subscription;
       isConnected = true;
       weightOutput = 'Connected. Waiting for data...';
+      selectedPort = portName;
     });
   }
 
   void _disconnectPort() {
-    reader?.close();
+    _subscription?.cancel();
+    _reader?.close();
     _port?.close();
-    reader = null;
-    _port = null;
+
     setState(() {
+      _reader = null;
+      _port = null;
+      _subscription = null;
       isConnected = false;
       weightOutput = 'Disconnected.';
     });
@@ -114,7 +122,7 @@ class _WeightReaderPage3State extends State<WeightReaderPage3> {
         children: [
           DropdownButton<String>(
             value: selectedPort,
-            hint: Text('Select COM Port'),
+            hint: const Text('Select COM Port'),
             items: availablePorts.map((port) {
               return DropdownMenuItem(
                 value: port,
@@ -124,11 +132,9 @@ class _WeightReaderPage3State extends State<WeightReaderPage3> {
             onChanged: isConnected
                 ? null
                 : (value) {
-                    if (value != null) {
-                      setState(() {
-                        selectedPort = value;
-                      });
-                    }
+                    setState(() {
+                      selectedPort = value;
+                    });
                   },
           ),
           const SizedBox(height: 20),
@@ -143,14 +149,14 @@ class _WeightReaderPage3State extends State<WeightReaderPage3> {
             child: Text(isConnected ? 'Disconnect' : 'Connect'),
           ),
           const SizedBox(height: 30),
-          Text(
+          const Text(
             'Weight Reading:',
             style: TextStyle(fontSize: 20),
           ),
           const SizedBox(height: 10),
           Text(
             weightOutput,
-            style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
           ),
         ],
       ),

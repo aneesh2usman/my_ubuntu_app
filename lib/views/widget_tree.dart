@@ -17,6 +17,8 @@ import 'package:my_ubuntu_app/views/pages/user_page_scroll4.dart';
 import 'package:my_ubuntu_app/views/pages/weight_scale_page.dart';
 import 'package:my_ubuntu_app/views/pages/weight_scale_page2.dart';
 import 'package:my_ubuntu_app/views/pages/weight_scale_page3.dart';
+import 'package:my_ubuntu_app/views/pages/weight_scale_page4.dart';
+import 'package:my_ubuntu_app/views/pages/weight_scale_page5.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'widgets/navbar_widget.dart';
@@ -34,6 +36,8 @@ List<Widget> pages = [
   WeightReaderPage(),
   ScaleReaderScreen(),
   WeightReaderPage3(),
+  WeightReaderPage4(),
+  ScaleScreen(),
 ];
 
 class WidgetTree extends StatelessWidget {

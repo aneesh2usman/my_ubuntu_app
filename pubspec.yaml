@@ -47,10 +47,11 @@ dependencies:
   equatable: ^2.0.5
   provider: ^6.0.0
   crypto: ^3.0.3 
-  flutter_libserialport: ^0.5.0
+  flutter_libserialport: ^0.3.0
   cached_network_image: ^3.4.1
   infinite_scroll_pagination: ^4.0.0
   pull_to_refresh_flutter3: ^2.0.2
+  get: ^4.6.5
 
 dev_dependencies:
   flutter_test:
