@@ -27,6 +27,7 @@ class _UserListPaginationWithMultipleFiltersState extends State<UserListPaginati
     super.dispose();
   }
 
+
   void _applyFilters(UserListProvider userProvider) {
     userProvider.filter(
       username: _usernameFilterController.text,
@@ -87,6 +88,7 @@ class _UserListPaginationConsumer extends StatelessWidget {
       body: Column(
         children: [
           UserListFilter(
+            context:context,
             userProvider: userProvider,
             usernameFilterController: usernameFilterController,
             emailFilterController: emailFilterController,

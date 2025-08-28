@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart' ;
 import 'package:my_ubuntu_app/data/db/app_database.dart';
 import 'package:my_ubuntu_app/data/db/models/user_models.dart';
 

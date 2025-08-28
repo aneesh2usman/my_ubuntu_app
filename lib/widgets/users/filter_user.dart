@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:my_ubuntu_app/views/providers/userlistprovider.dart';
+import 'package:my_ubuntu_app/widgets/users/exports/user_export_excel.dart';
 
 Widget UserListFilter({
   Key? key,
+  required BuildContext context,
   required UserListProvider userProvider,
   required TextEditingController usernameFilterController,
   required TextEditingController emailFilterController,
@@ -82,6 +84,13 @@ Widget UserListFilter({
                   onPressed: () {
                     
                     applyFilters(userProvider);
+                  },
+                  child: const Text('Search'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    
+                    exportUsersToExcel(context,userProvider);
                   },
                   child: const Text('Search'),
                 ),

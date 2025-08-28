@@ -3,7 +3,9 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  file_saver
   flutter_libserialport
+  permission_handler_windows
   sqlite3_flutter_libs
 )
 

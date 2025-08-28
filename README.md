@@ -8,6 +8,9 @@ flutter run -d linux
 ## Run Code Generation: Run this command in your terminal:
 flutter pub run build_runner build --delete-conflicting-outputs
 
+### install for excel
+sudo apt install libwebkit2gtk-4.0-dev
+
 flutter pub run drift_dev schema generate schemas/schema.drift
 
 
