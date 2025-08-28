@@ -17,13 +17,24 @@ class NavbarWidget extends StatelessWidget {
             // NavigationDestination(icon: Icon(Icons.task), label: "Tasks with pagination"),
             // NavigationDestination(icon: Icon(Icons.task), label: "Tasks with pagination provider"),
             NavigationDestination(icon: Icon(Icons.people_alt), label: "Users"),
-            NavigationDestination(icon: Icon(Icons.people_alt), label: "Users scroll 1"),
-            NavigationDestination(icon: Icon(Icons.people_alt), label: "Users scroll 2"),
-            NavigationDestination(icon: Icon(Icons.people_alt), label: "Users scroll 3"),
-            NavigationDestination(icon: Icon(Icons.people_alt), label: "Users scroll 4"),
-            NavigationDestination(icon: Icon(Icons.people_alt), label: "weight"),
-            NavigationDestination(icon: Icon(Icons.people_alt), label: "weight2"),
-            NavigationDestination(icon: Icon(Icons.people_alt), label: "weight3"),
+            NavigationDestination(
+                icon: Icon(Icons.people_alt), label: "Users scroll 1"),
+            NavigationDestination(
+                icon: Icon(Icons.people_alt), label: "Users scroll 2"),
+            NavigationDestination(
+                icon: Icon(Icons.people_alt), label: "Users scroll 3"),
+            NavigationDestination(
+                icon: Icon(Icons.people_alt), label: "Users scroll 4"),
+            NavigationDestination(
+                icon: Icon(Icons.people_alt), label: "weight"),
+            NavigationDestination(
+                icon: Icon(Icons.people_alt), label: "weight2"),
+            NavigationDestination(
+                icon: Icon(Icons.people_alt), label: "weight3"),
+            NavigationDestination(
+                icon: Icon(Icons.people_alt), label: "weight4"),
+            NavigationDestination(
+                icon: Icon(Icons.people_alt), label: "weight5"),
           ],
           onDestinationSelected: (int value) {
             selectedPageNotifier.value = value;

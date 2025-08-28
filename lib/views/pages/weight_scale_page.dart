@@ -37,7 +37,7 @@ class _WeightReaderPageState extends State<WeightReaderPage> {
     }
 
     final config = _port!.config;
-    config.baudRate = 9600;
+    config.baudRate = 9601;
     config.bits = 8;
     config.parity = SerialPortParity.none;
     config.stopBits = 1;
